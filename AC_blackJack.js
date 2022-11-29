@@ -93,10 +93,12 @@ var shuffle = function(array) {
 function onMessageReceived(channel, message, sender, localOnly) {
     if (channel === channelComm) {
         var data = JSON.parse(message);
-        if (data.action === "XXX") {
+        if (data.action === "PLAYER_SIT") {
             //instructions
-        } else if  (data.action === "YYY") {
+            print("BLACKJACK PLAYER " + data.playerNo + " (" + data.avatarID + ") SIT!");
+        } else if  (data.action === "PLAYER_LEAVE") {
             //instructions
+            print("BLACKJACK PLAYER " + data.playerNo + " LEAVE!");
         }
     }
 }
@@ -108,6 +110,8 @@ var message = {
 };
 Messages.sendMessage(channelComm, JSON.stringify(message));
  */
+
+//var avatar = AvatarList.getAvatar(avatars[i]);
 
 function myTimer(deltaTime) {
     var today = new Date();
