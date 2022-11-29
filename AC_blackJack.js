@@ -78,6 +78,7 @@ var cards = [];
 
 var persons = [];
 var players = [
+    {"void": "void"},
     {"person": -1, "state": "OUT"},
     {"person": -1, "state": "OUT"},
     {"person": -1, "state": "OUT"},
