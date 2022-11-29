@@ -86,7 +86,7 @@ var players = [
 
 function playerSit(playerNo, avatarID){
     personNo = -1;
-    for (var 1 = 0; i < persons.length; i++) {
+    for (var i = 0; i < persons.length; i++) {
         if (persons[i].avatarID === avatarID) {
             personNo = i;
             break;
