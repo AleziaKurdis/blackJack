@@ -76,6 +76,45 @@ var NEW_CARDS_PACK = [
 
 var cards = [];
 
+var persons = [];
+var players = [
+    {"person": -1, "state": "OUT"},
+    {"person": -1, "state": "OUT"},
+    {"person": -1, "state": "OUT"},
+    {"person": -1, "state": "OUT"}
+];
+
+function playerSit(playerNo, avatarID){
+    personNo = -1;
+    for (var 1 = 0; i < persons.length; i++) {
+        if (persons[i].avatarID === avatarID) {
+            personNo = i;
+            break;
+        }
+    }
+    if (personNo !== -1) {
+        //Connu
+        players[playerNo].person = personNo;
+        players[playerNo].state = "JOINED";
+    } else {
+        //New person
+        var newPerson = {};
+        newPerson.avatarID = avatarID;
+        newPerson.name = getName(avatarID);
+        newPerson.cash = 50;
+        var length = persons.push(newPerson);
+        players[playerNo].person = length - 1;
+        players[playerNo].state = "JOINED";
+    }
+    print("BLACKJACK Players: " + JSON.stringify(players)); //##################################################################DEBUG
+    print("BLACKJACK Persons: " + JSON.stringify(persons)); //##################################################################DEBUG
+}
+
+function getName(avatarID) {
+    var avatar = AvatarList.getAvatar(avatarID);
+    return avatar.sessionDisplayName;
+}
+
 function shuffleCards() {
     cards = [];
     cards = shuffle(NEW_CARDS_PACK.slice());
@@ -90,15 +129,20 @@ var shuffle = function(array) {
    return temp;
 };
 
+
+
 function onMessageReceived(channel, message, sender, localOnly) {
+    var playerNo;
     if (channel === channelComm) {
         var data = JSON.parse(message);
         if (data.action === "PLAYER_SIT") {
-            //instructions
-            print("BLACKJACK PLAYER " + data.playerNo + " (" + data.avatarID + ") SIT!");
+            playerNo = parseInt(data.playerNo, 10);
+            playerSit(playerNo, data.avatarID);
+            print("BLACKJACK PLAYER " + data.playerNo + " (" + data.avatarID + ") SIT!");//#######################################################
         } else if  (data.action === "PLAYER_LEAVE") {
-            //instructions
-            print("BLACKJACK PLAYER " + data.playerNo + " LEAVE!");
+            playerNo = parseInt(data.playerNo, 10);
+            players[playerNo] = {"person": -1, "state": "OUT"};
+            print("BLACKJACK PLAYER " + data.playerNo + " LEAVE!");//################################################################################
         }
     }
 }
@@ -111,7 +155,6 @@ var message = {
 Messages.sendMessage(channelComm, JSON.stringify(message));
  */
 
-//var avatar = AvatarList.getAvatar(avatars[i]);
 
 function myTimer(deltaTime) {
     var today = new Date();
