@@ -610,7 +610,7 @@
 
     var chairID = Uuid.NULL;
 
-    function deleteChair() {
+    function createChair() {
         var renderWithZones = Entities.getEntityProperties(_this.entityID, ["renderWithZones"]).renderWithZones;
         
         if (chairID === Uuid.NULL) {
@@ -636,7 +636,7 @@
         }
     }
 
-    function createChair() {
+    function deleteChair() {
         if (chairID !== Uuid.NULL) {
             Entities.deleteEntity(chairID);
             chairID = Uuid.NULL;
