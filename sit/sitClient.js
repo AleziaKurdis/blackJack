@@ -625,7 +625,7 @@
                     "z": 0.60999995470047
                 },
                 "localRotation": Quat.fromVec3Degrees({"x": 0.0, "y": -90,"z": 0.0}),
-                "localPosition": {"x": -0.0519, "y": -0.8773, "z": 0.0},
+                "localPosition": {"x": 0, "y": -0.8773, "z": -0.0519},
                 "grab": {
                     "grabbable": false
                 },
