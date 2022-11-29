@@ -517,10 +517,12 @@
         var localOffset = { x: 0, y: SITTABLE_Y_OFFSET, z: 0 };
         var worldOffset = Vec3.multiplyQbyV(properties.rotation, localOffset);
         var sittablePosition = Vec3.sum(properties.position, worldOffset);
+        var playerNo = properties.description;
 
         _this.clickToSitOverlay = Entities.addEntity({
             type: "Image",
             name: "Click to Sit Local Entity",
+            description: playerNo,
             grab: {
                 grabbable: false
             },

@@ -141,7 +141,7 @@
         if (DEBUG) {
             console.log("sitServer.js: " + _this.entityID + ": Entering `onStandUp()` for seat ID: " + id + "...");
         }
-
+        print("BLACKJACK - STANDUP!");//################################################################# DEBUG
         _this.isOccupied = false;
         _this.currentClientSessionID = false;
         if (_this.nextHeartbeatTimeout) {
@@ -173,6 +173,7 @@
         if (DEBUG) {
             console.log("sitServer.js: " + _this.entityID + ": Calling `deleteAllClickToSitOverlays()` for all avatars, then sending heartbeat request...");
         }
+        print("BLACKJACK - SIT!");//################################################################# DEBUG
         for (var i = 0; i < params.length; i++) {
             Entities.callEntityClientMethod(
                 params[i],
