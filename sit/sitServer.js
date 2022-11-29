@@ -141,7 +141,9 @@
         if (DEBUG) {
             console.log("sitServer.js: " + _this.entityID + ": Entering `onStandUp()` for seat ID: " + id + "...");
         }
-        print("BLACKJACK - STANDUP!");//################################################################# DEBUG
+
+        print("BLACKJACK - STANDUP: " + _this.playerNo);//################################################################# DEBUG
+
         _this.isOccupied = false;
         _this.currentClientSessionID = false;
         if (_this.nextHeartbeatTimeout) {
@@ -173,7 +175,7 @@
         if (DEBUG) {
             console.log("sitServer.js: " + _this.entityID + ": Calling `deleteAllClickToSitOverlays()` for all avatars, then sending heartbeat request...");
         }
-        print("BLACKJACK - SIT!");//################################################################# DEBUG
+        print("BLACKJACK - SIT: " + _this.playerNo + " | " + _this.currentClientSessionID);//################################################################# DEBUG
         for (var i = 0; i < params.length; i++) {
             Entities.callEntityClientMethod(
                 params[i],
@@ -189,6 +191,7 @@
     // Preload entity lifetime method
     function preload(id) {
         _this.entityID = id;
+        _this.playerNo = Entities.getEntityProperties(_this.entityID, ["description"]).description;
         _this.isOccupied = false;
     }
 
