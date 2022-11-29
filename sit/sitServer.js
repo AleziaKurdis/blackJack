@@ -14,6 +14,8 @@
 (function () {
     var DEBUG = false;
 
+    var channelComm = "ak.blackJack.ac.communication";
+
     // Remotely callable
     // Resolves heartbeat called from sitClient
     function heartbeatResponse() {
@@ -142,8 +144,12 @@
             console.log("sitServer.js: " + _this.entityID + ": Entering `onStandUp()` for seat ID: " + id + "...");
         }
 
-        print("BLACKJACK - STANDUP: " + _this.playerNo);//################################################################# DEBUG
-
+        var message = {
+            "action": "PLAYER_LEAVE",
+            "playerNo": _this.playerNo
+        };
+        Messages.sendMessage(channelComm, JSON.stringify(message));
+        
         _this.isOccupied = false;
         _this.currentClientSessionID = false;
         if (_this.nextHeartbeatTimeout) {
@@ -175,7 +181,14 @@
         if (DEBUG) {
             console.log("sitServer.js: " + _this.entityID + ": Calling `deleteAllClickToSitOverlays()` for all avatars, then sending heartbeat request...");
         }
-        print("BLACKJACK - SIT: " + _this.playerNo + " | " + _this.currentClientSessionID);//################################################################# DEBUG
+
+        var message = {
+            "action": "PLAYER_SIT",
+            "playerNo": _this.playerNo,
+            "avatarID": _this.currentClientSessionID
+        };
+        Messages.sendMessage(channelComm, JSON.stringify(message));
+        
         for (var i = 0; i < params.length; i++) {
             Entities.callEntityClientMethod(
                 params[i],
