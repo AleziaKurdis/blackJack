@@ -18,6 +18,7 @@ var channelComm = "ak.blackJack.ac.communication";
 var ORIGIN_POSITION = {"x":8000,"y":8000,"z":8000};
 
 var PROCESS_INTERVAL = 1000; //1 sec
+var processTimer = 0;
 
 var NEW_CARDS_PACK = [
     {"value": "A", "suit": "HEARTS"},
@@ -73,17 +74,23 @@ var NEW_CARDS_PACK = [
     {"value": "Q", "suit": "SPADES"},
     {"value": "K", "suit": "SPADES"}
 ];
+var cardDrawing = 0;
+
 
 var cards = [];
 
 var persons = [];
 var players = [
     {"void": "void"},
-    {"person": -1, "state": "OUT"},
-    {"person": -1, "state": "OUT"},
-    {"person": -1, "state": "OUT"},
-    {"person": -1, "state": "OUT"}
+    {"person": -1, "state": "OUT", "bet": 0},
+    {"person": -1, "state": "OUT", "bet": 0},
+    {"person": -1, "state": "OUT", "bet": 0},
+    {"person": -1, "state": "OUT", "bet": 0}
 ];
+
+var gameLoopOn = false;
+var gameflowState = "OFF"; //OFF - BETTING - DISTRIBUTION - ACTIONS - PLAY_AND_PAY
+var playerInProcess = 0;
 
 function playerSit(playerNo, avatarID){
     personNo = -1;
@@ -97,6 +104,7 @@ function playerSit(playerNo, avatarID){
         //Connu
         players[playerNo].person = personNo;
         players[playerNo].state = "JOINED";
+        players[playerNo].bet = 0;
     } else {
         //New person
         var newPerson = {};
@@ -106,6 +114,11 @@ function playerSit(playerNo, avatarID){
         var length = persons.push(newPerson);
         players[playerNo].person = length - 1;
         players[playerNo].state = "JOINED";
+        players[playerNo].bet = 0;
+    }
+    if (gameflowState === "OFF") {
+        Script.update.connect(myTimer);
+        gameflowState = "BETTING";
     }
     print("BLACKJACK Players: " + JSON.stringify(players)); //##################################################################DEBUG
     print("BLACKJACK Persons: " + JSON.stringify(persons)); //##################################################################DEBUG
@@ -118,7 +131,9 @@ function getName(avatarID) {
 
 function shuffleCards() {
     cards = [];
-    cards = shuffle(NEW_CARDS_PACK.slice());
+    var fourPack = NEW_CARDS_PACK.concat(NEW_CARDS_PACK, NEW_CARDS_PACK, NEW_CARDS_PACK);
+    cards = shuffle(fourPack.slice());
+    cardDrawing = 5; //we remove the 5 first cards of the pack.
 }
 
 var shuffle = function(array) {
@@ -130,7 +145,27 @@ var shuffle = function(array) {
    return temp;
 };
 
+function isAllPlayerOff() {
+    var allOff = true;
+    for (var i = 1; i > players.length; i++) {
+        if (players[i].state !== "OUT") {
+            allOff = false;
+            break;
+        }
+    }
+    return allOff;
+}
 
+function isAllPlayerHaveBet() {
+    var allbet = true;
+    for (var i = 1; i > players.length; i++) {
+        if (players[i].bet === 0) {
+            allbet = false;
+            break;
+        }
+    }
+    return allbet;
+}
 
 function onMessageReceived(channel, message, sender, localOnly) {
     var playerNo;
@@ -139,13 +174,192 @@ function onMessageReceived(channel, message, sender, localOnly) {
         if (data.action === "PLAYER_SIT") {
             playerNo = parseInt(data.playerNo, 10);
             playerSit(playerNo, data.avatarID);
-            print("BLACKJACK PLAYER " + data.playerNo + " (" + data.avatarID + ") SIT!");//#######################################################
         } else if  (data.action === "PLAYER_LEAVE") {
             playerNo = parseInt(data.playerNo, 10);
-            players[playerNo] = {"person": -1, "state": "OUT"};
-            print("BLACKJACK PLAYER " + data.playerNo + " LEAVE!");//################################################################################
+            players[playerNo] = {"person": -1, "state": "OUT", "bet": 0};
+            if (isAllPlayerOff()) {
+                Script.update.disconnect(myTimer);
+                gameflowState = "OFF";
+            }
+        } else if  (data.action === "BET_CONFIRMED") {
+            playerNo = parseInt(data.playerNo, 10);
+            players[playerNo].bet = data.bet;
+            if (isAllPlayerHaveBet()) {
+                cardsDistribution();
+                gameflowState = "ACTIONS";
+                playerInProcess = 1;
+                sendActions();
+            }
+        } else if  (data.action === "STAND") {
+                playerInProcess = playerInProcess + 1;
+                if (playerInProcess === 5) {
+                    croupierTurn();
+                }            
+        } else if  (data.action === "HIT") {
+            playerNo = parseInt(data.playerNo, 10);
+            players[playerNo].hand.push(drawAcard());
+            if (checkCount(players[playerNo].hand) > 21) {
+                playerInProcess = playerInProcess + 1;
+                if (playerInProcess === 5) {
+                    croupierTurn();
+                }
+            }
+        } else if  (data.action === "SURRENDER") {
+            playerNo = parseInt(data.playerNo, 10);
+            players[playerNo].hand = [];    
+        } else if  (data.action === "INSURANCE") {
+            playerNo = parseInt(data.playerNo, 10);
+            players[playerNo].insurance = true;
         }
     }
+}
+var hand = [];
+function cardsDistribution() {
+    for (var i = 1; i > players.length; i++) {
+        if (players[i].state === "PLAYING") {
+            players[i].insurance = false;
+            players[i].hand = [];
+            players[i].hand.push(drawAcard());
+            players[i].hand.push(drawAcard());
+        }
+        //Send Card disply for each user
+    }
+    hand = [];
+    hand.push(drawAcard());
+    //Send Card display for croupier
+}
+
+function croupierTurn() {
+    hand.push(drawAcard());
+    var croupierScore = checkCount(hand);
+    var playerScore = 0;
+    for (vari = 1; i < players.length; i++) {
+        if (players[i].state === "PLAYING") {
+            if (players[i].hand.length === 0) {
+                //surrendered (lose half bet)
+            } else {
+                playerScore = checkCount(players[i].hand);
+                if (playerScore > 21) {
+                    if (isThisABlackJack(hand) &&  players[i].insurance) {
+                        //lose nothing
+                    } else {
+                        //loose full bet
+                    }
+                } else {
+                    if (playerScore > croupierScore) {
+                        if (isThisABlackJack(players[i].hand)) {
+                            //win 1.5 X bet 
+                        } else {
+                            //win 1 X bet  
+                        }
+                    }
+                }
+            }
+        }
+        players[i].state === "JOINED";    
+    }
+    //update rendering
+    gameflowState = "BETTING";
+    playerInProcess = 1;
+}
+
+function drawAcard() {
+    var drawn = cards[cardDrawing];
+    cardDrawing = cardDrawing + 1;
+    if (cardDrawing === cards.length) {
+        shuffleCards();
+    }
+    return drawn;
+}
+
+function sendActions() {
+    //playerInProcess
+    var actionList = ["STAND"];
+    if (!isThisABlackJack(players[playerInProcess].hand)) {
+        actionList.push("HIT");
+        actionList.push("SURRENDER");
+    }
+
+    if (hand[0].value === "A") {
+        actionList.push("INSURANCE");
+    }
+    //Sent Action to user
+}
+
+function isThisABlackJack(handArray) {
+    if (handArray.length !== 2) { 
+        return false;
+    } else {
+        if ((getCardValue(handArray[0].value) + getCardValue(handArray[1].value)) === 21 ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
+function checkCount(handArray) {
+    var score = 0;
+    var card;
+    var hasAce = false;
+    for (var i = 0; i < handArray.length; i++) {
+        card = getCardValue(handArray[i].value);
+        if (card === 11) {
+            card = 1;
+            hasAce = true;
+        }
+        score = score + card;       
+    }
+    if (hasAce && score + 10 <= 21) {
+        score = score + 10;
+    }
+    return score;
+}
+
+function getCardValue(strValue) {
+    var value = 0;
+    switch(strValue) {
+        case "2":
+            value = 2;
+            break;
+        case "3":
+            value = 3;
+            break;
+        case "4":
+            value = 4;
+            break;
+        case "5":
+            value = 5;
+            break;
+        case "6":
+            value = 6;
+            break;
+        case "7":
+            value = 7;
+            break;
+        case "8":
+            value = 8;
+            break;
+        case "9":
+            value = 9;
+            break;
+        case "10":
+            value = 10;
+            break;
+        case "J":
+            value = 10;
+            break;
+        case "Q":
+            value = 10;
+            break;
+        case "K":
+            value = 10;
+            break;
+        case "A":
+            value = 11;
+            break;
+    }
+    return value;
 }
 
 /* 
@@ -160,7 +374,19 @@ Messages.sendMessage(channelComm, JSON.stringify(message));
 function myTimer(deltaTime) {
     var today = new Date();
     if ((today.getTime() - processTimer) > PROCESS_INTERVAL ) {
-        //instructions
+        
+        switch(gameflowState) {
+            case "BETTING":
+                for (var i = 1; i < players.length; i++) {
+                    if (players[i].state === "JOINED") {
+                        //send cash display update
+                        //send betting action
+                        players[i].state === "PLAYING";
+                    }
+                }
+                break;
+        }
+        
         todayAgain = new Date();
         processTimer = todayAgain.getTime();
     }
@@ -169,14 +395,13 @@ function myTimer(deltaTime) {
 Messages.subscribe(channelComm);
 Messages.messageReceived.connect(onMessageReceived);
 
-//TESTING
 shuffleCards();
-print("BLACKJACK: " + JSON.stringify(cards));
-print("BLACKJACK ORIGINAL: " + JSON.stringify(NEW_CARDS_PACK));
+print("BLACKJACK: " + JSON.stringify(cards)); //###########################################################################DEBUG
 
 Script.scriptEnding.connect(function () {
 
     Messages.messageReceived.disconnect(onMessageReceived);
     Messages.unsubscribe(channelComm);
-    //Script.update.disconnect(myTimer);
+    Script.update.disconnect(myTimer);
+    gameflowState = "OFF";
 });
