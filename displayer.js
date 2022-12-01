@@ -76,6 +76,25 @@
                 "grabbable": false
             }
         },"local");
+        var position, id;
+        if (handArray.length !== 0) {
+            for (var i = 0; i < handArray.length; i++) {
+                position = {"x": (i * 0.12), "y": 0, "z": 0};
+                id = Entities.addEntity({
+                    "parentID": playersCardsIDs[playerNo],
+                    "renderWithZones": thisRenderWithZones,
+                    "name": "Player_" + playerNo + "_Card_" + (i+1),
+                    "localPosition": position,
+                    "dimensions": {"x": 0.06, "y": 0.10, "z": 0.01},
+                    "grab": {
+                        "grabbable": false
+                    },
+                    "imageURL": ROOT +  "cards/" + handArray[i].value + "_of_" + handArray[i].suit.toLowerCase() + ".svg",
+                    "emissive": false,
+                    "type": "Image"
+                },"local") 
+            }
+        }
     }
 
     function clearAllCards() {
