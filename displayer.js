@@ -66,7 +66,7 @@
             "parentID": thisEntityID,
             "renderWithZones": thisRenderWithZones,
             "localPosition": cardHandlerPosition[playerNo].localPosition,
-            "localRotation": Quat.fromVec3Degrees({"x": 90, "y": cardHandlerPosition[playerNo].rotation, "z": 0}),
+            "localRotation": Quat.fromVec3Degrees({"x": 90, "y": cardHandlerPosition[playerNo].rotation - 90, "z": 0}),
             "type": "Shape",
             "shape": "Cube",
             "dimensions": {"x": 0.01, "y": 0.01, "z": 0.01},
