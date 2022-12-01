@@ -80,7 +80,7 @@
 
     function clearAllCards() {
         for (var i = 0; i < playersCardsIDs.length; i++) {
-            if (playersCardsIDs[i] !=== Uuid.NULL) {
+            if (playersCardsIDs[i] !== Uuid.NULL) {
                 Entities.deleteEntity(playersCardsIDs[i]);
                 playersCardsIDs[i] = Uuid.NULL;
             }
