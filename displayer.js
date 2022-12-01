@@ -49,11 +49,11 @@
     var playersCardsIDs = [Uuid.NULL, Uuid.NULL, Uuid.NULL, Uuid.NULL, Uuid.NULL];
     
     var cardHandlerPosition = [
-        {"localPosition": {"x": 0, "y": 0, "z": 0}, "rotation": 0}, //croupier
-        {"localPosition": {"x": 0, "y": 0, "z": 0}, "rotation": 72}, //player 1
-        {"localPosition": {"x": 0, "y": 0, "z": 0}, "rotation": 36}, //player 2 
-        {"localPosition": {"x": 0, "y": 0, "z": 0}, "rotation": -36}, //player 3
-        {"localPosition": {"x": 0, "y": 0, "z": 0}, "rotation": -72}, //player 4
+        {"localPosition": {"x": 0, "y": 1.1464, "z": 0}, "rotation": 0}, //croupier
+        {"localPosition": {"x": 0, "y": 1.1464, "z": 0}, "rotation": 72}, //player 1
+        {"localPosition": {"x": 0, "y": 1.1464, "z": 0}, "rotation": 36}, //player 2 
+        {"localPosition": {"x": 0, "y": 1.1464, "z": 0}, "rotation": -36}, //player 3
+        {"localPosition": {"x": 0, "y": 1.1464, "z": 0}, "rotation": -72}, //player 4
     ];
 
     function displayHand(playerNo, handArray) {
