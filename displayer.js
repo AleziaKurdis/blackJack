@@ -79,7 +79,7 @@
         var position, id;
         if (handArray.length !== 0) {
             for (var i = 0; i < handArray.length; i++) {
-                position = {"x": (i * 0.12), "y": 0, "z": 0};
+                position = {"x": (i * 0.07), "y": 0, "z": 0};
                 id = Entities.addEntity({
                     "parentID": playersCardsIDs[playerNo],
                     "renderWithZones": thisRenderWithZones,
