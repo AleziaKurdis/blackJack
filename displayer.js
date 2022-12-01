@@ -50,8 +50,8 @@
     
     var cardHandlerPosition = [
         {"localPosition": {"x": 0.1343, "y": 1.1464, "z": -0.4646}, "rotation": -90}, //croupier
-        {"localPosition": {"x": 0.7583, "y": 1.1464, "z": -0.4363}, "rotation": -54}, //player 1
-        {"localPosition": {"x": 0.3689, "y": 1.1464, "z": -0.8022}, "rotation": -18}, //player 2 
+        {"localPosition": {"x": 0.7583, "y": 1.1464, "z": -0.4363}, "rotation": -144}, //player 1
+        {"localPosition": {"x": 0.3689, "y": 1.1464, "z": -0.8022}, "rotation": -108}, //player 2 
         {"localPosition": {"x": -0.1467, "y": 1.1464, "z": -0.8686}, "rotation": -72}, //player 3
         {"localPosition": {"x": -0.6194, "y": 1.1464, "z": -0.6026}, "rotation": -36}, //player 4
     ];
@@ -71,7 +71,7 @@
             "shape": "Cube",
             "dimensions": {"x": 0.01, "y": 0.01, "z": 0.01},
             "name": "Player_" + playerNo + "_cardsHandler",
-            "visible": true, //################################################# SHOULD BE FALSE
+            "visible": false,
             "grab": {
                 "grabbable": false
             }
