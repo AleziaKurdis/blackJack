@@ -80,19 +80,39 @@
         if (handArray.length !== 0) {
             for (var i = 0; i < handArray.length; i++) {
                 position = {"x": (i * 0.07), "y": 0, "z": 0};
+                if (handArray[i].suit !== "SPLIT") {
+                    id = Entities.addEntity({
+                        "parentID": playersCardsIDs[playerNo],
+                        "renderWithZones": thisRenderWithZones,
+                        "name": "Player_" + playerNo + "_Card_" + (i+1),
+                        "localPosition": position,
+                        "localRotation": Quat.fromVec3Degrees({"x": 0, "y": (Math.random() * 6) - 3, "z": 0}),
+                        "dimensions": {"x": 0.06, "y": 0.10, "z": 0.01},
+                        "grab": {
+                            "grabbable": false
+                        },
+                        "imageURL": ROOT +  "cards/" + handArray[i].value + "_of_" + handArray[i].suit.toLowerCase() + ".svg",
+                        "emissive": false,
+                        "type": "Image"
+                    },"local");
+                }
+            }
+            if (handArray.length !== 1) {
+                position = {"x": 0.07, "y": 0, "z": 0};
                 id = Entities.addEntity({
                     "parentID": playersCardsIDs[playerNo],
                     "renderWithZones": thisRenderWithZones,
-                    "name": "Player_" + playerNo + "_Card_" + (i+1),
+                    "name": "Player_" + playerNo + "_Back",
                     "localPosition": position,
+                    "localRotation": Quat.fromVec3Degrees({"x": 0, "y": (Math.random() * 6) - 3, "z": 0}),
                     "dimensions": {"x": 0.06, "y": 0.10, "z": 0.01},
                     "grab": {
                         "grabbable": false
                     },
-                    "imageURL": ROOT +  "cards/" + handArray[i].value + "_of_" + handArray[i].suit.toLowerCase() + ".svg",
+                    "imageURL": ROOT +  "cards/back.svg",
                     "emissive": false,
                     "type": "Image"
-                },"local") 
+                },"local");                
             }
         }
     }
