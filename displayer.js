@@ -50,8 +50,8 @@
     
     var cardHandlerPosition = [
         {"localPosition": {"x": 0.1343, "y": 1.0664, "z": -0.4646}, "rotation": 0}, //croupier
-        {"localPosition": {"x": 0.7583, "y": 1.0664, "z": -0.4363}, "rotation": 73}, //player 1
-        {"localPosition": {"x": 0.3689, "y": 1.0664, "z": -0.8022}, "rotation": 36}, //player 2 
+        {"localPosition": {"x": 0.7583, "y": 1.0664, "z": -0.4363}, "rotation": 18}, //player 1
+        {"localPosition": {"x": 0.3689, "y": 1.0664, "z": -0.8022}, "rotation": 54}, //player 2 
         {"localPosition": {"x": -0.1467, "y": 1.0664, "z": -0.8686}, "rotation": -72}, //player 3
         {"localPosition": {"x": -0.6194, "y": 1.0664, "z": -0.6026}, "rotation": -36}, //player 4 -144
     ];
