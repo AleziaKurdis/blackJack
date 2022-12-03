@@ -143,7 +143,6 @@
     ];
 
     function drawPlayerMoney(playerNo, amount, avatarID) {
-        print("GOT IT!");
         clearPlayerMoney(playerNo);
         //create handler
         playersMoneyIDs[playerNo] = Entities.addEntity({
@@ -155,7 +154,7 @@
             "shape": "Cube",
             "dimensions": {"x": 0.01, "y": 0.01, "z": 0.01},
             "name": "Player_" + playerNo + "_MoneyHandler",
-            "visible": true, //########################################################################################################## DEBUG (must be false)
+            "visible": false,
             "grab": {
                 "grabbable": false
             }
@@ -180,6 +179,7 @@
     }
 
     function genMoneyStack(parentID, nbrTokenInStack, localPosition, exponent, actionScript) {
+        print("Called!"); //###############################################################################################TRASH DEBUG Print
         var id = Entities.addEntity({
             "parentID": parentID,
             "renderWithZones": thisRenderWithZones,
