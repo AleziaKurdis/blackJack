@@ -143,6 +143,7 @@
     ];
 
     function drawPlayerMoney(playerNo, amount, avatarID) {
+        print("GOT IT!");
         clearPlayerMoney(playerNo);
         //create handler
         playersMoneyIDs[playerNo] = Entities.addEntity({
@@ -154,7 +155,7 @@
             "shape": "Cube",
             "dimensions": {"x": 0.01, "y": 0.01, "z": 0.01},
             "name": "Player_" + playerNo + "_MoneyHandler",
-            "visible": false,
+            "visible": true, //########################################################################################################## DEBUG (must be false)
             "grab": {
                 "grabbable": false
             }
