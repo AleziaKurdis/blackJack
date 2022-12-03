@@ -179,7 +179,7 @@
     }
 
     function genMoneyStack(parentID, nbrTokenInStack, localPosition, exponent, actionScript) {
-        print("Called!"); //###############################################################################################TRASH DEBUG Print
+        print("Called2"); //###############################################################################################TRASH DEBUG Print
         var id = Entities.addEntity({
             "parentID": parentID,
             "renderWithZones": thisRenderWithZones,
@@ -193,7 +193,7 @@
             "script": actionScript,
             "description": "" + (10^exponent),
             "useOriginalPivot": true,
-            "type": "model"
+            "type": "Model"
         },"local");
     }
 
