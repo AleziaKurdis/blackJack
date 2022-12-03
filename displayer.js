@@ -86,7 +86,7 @@
                         "renderWithZones": thisRenderWithZones,
                         "name": "Player_" + playerNo + "_Card_" + (i+1),
                         "localPosition": position,
-                        "localRotation": Quat.fromVec3Degrees({"x": 0, "y": (Math.random() * 8) - 4, "z": 0}),
+                        "localRotation": Quat.fromVec3Degrees({"x": 0, "y": 0, "z": (Math.random() * 8) - 4}),
                         "dimensions": {"x": 0.06, "y": 0.10, "z": 0.01},
                         "grab": {
                             "grabbable": false
@@ -104,7 +104,7 @@
                     "renderWithZones": thisRenderWithZones,
                     "name": "Player_" + playerNo + "_Back",
                     "localPosition": position,
-                    "localRotation": Quat.fromVec3Degrees({"x": 0, "y": (Math.random() * 8) - 4, "z": 0}),
+                    "localRotation": Quat.fromVec3Degrees({"x": 0, "y": 0, "z": (Math.random() * 8) - 4}),
                     "dimensions": {"x": 0.06, "y": 0.10, "z": 0.01},
                     "grab": {
                         "grabbable": false
@@ -112,9 +112,51 @@
                     "imageURL": ROOT +  "cards/back.svg",
                     "emissive": false,
                     "type": "Image"
-                },"local");                
+                },"local");
             }
         }
+    }
+
+    function amountToAutoChange(amount) {
+        var strAmount = "" + amount;
+        var autoChange = "";
+        var mustDecrease = false;
+        var strChar = "";
+        var num = 0;
+        for (var i = strAmount.length - 1; i >= 0; i--) {
+            strChar = strAmount.substr(i, 1);
+            if (mustDecrease) {
+            	num = parseInt(strChar,10);
+                num = num - 1;
+                if (num === 0) {
+                    if (i === 0) {
+                        strChar = "";
+                    } else {
+                        strChar = "T";
+                        mustDecrease = true;
+                    }
+                } else if (num === -1) {
+                    if (i === 0) {
+                        strChar = "";
+                    } else {
+                        strChar = "9";
+                        mustDecrease = true; 
+                    }
+                } else {
+                	strChar = "" + num;
+                    mustDecrease = false;
+                }
+            } else {
+                if (strChar === "0") {
+                    strChar = "T";
+                    mustDecrease = true;
+                } else {
+                    mustDecrease = false;
+                }
+            }
+            autoChange = strChar + autoChange;
+        }
+        return autoChange;
     }
 
     function clearAllCards() {
