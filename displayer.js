@@ -42,6 +42,12 @@
                 displayHand(playerNo, data.hand);
             } else if (data.action === "CLEAR_ALL_CARDS") {
                 clearAllCards();
+            } else if (data.action === "DISPLAY_PLAYER_MONEY") {
+                playerNo = parseInt(data.playerNo, 10);
+                drawPlayerMoney(playerNo, data.amount, data.avatarID);
+            } else if (data.action === "CLEAR_PLAYER_MONEY") {
+                playerNo = parseInt(data.playerNo, 10);
+                clearPlayerMoney(playerNo);
             }
         }
     }
@@ -117,6 +123,86 @@
         }
     }
 
+    function clearAllCards() {
+        for (var i = 0; i < playersCardsIDs.length; i++) {
+            if (playersCardsIDs[i] !== Uuid.NULL) {
+                Entities.deleteEntity(playersCardsIDs[i]);
+                playersCardsIDs[i] = Uuid.NULL;
+            }
+        }
+    }
+
+    var playersMoneyIDs = [Uuid.NULL, Uuid.NULL, Uuid.NULL, Uuid.NULL, Uuid.NULL];
+    
+    var playersMoneyHandlerPosition = [
+        {"localPosition": {"x": 0, "y": 0, "z": 0}, "rotation": 0}, //croupier, NEVER USED
+        {"localPosition": {"x": 0.6445, "y": 1.0664, "z": -0.7723}, "rotation": 54}, //player 1
+        {"localPosition": {"x": 0.1106, "y": 1.0664, "z": -0.9917}, "rotation": 18}, //player 2 
+        {"localPosition": {"x":-0.4990, "y": 1.0664, "z": -0.8618}, "rotation": -18}, //player 3
+        {"localPosition": {"x": -0.9533, "y": 1.0664, "z": -0.3847}, "rotation": -54}, //player 4
+    ];
+
+    function drawPlayerMoney(playerNo, amount, avatarID) {
+        clearPlayerMoney(playerNo);
+        //create handler
+        playersMoneyIDs[playerNo] = Entities.addEntity({
+            "parentID": thisEntityID,
+            "renderWithZones": thisRenderWithZones,
+            "localPosition": playersMoneyHandlerPosition[playerNo].localPosition,
+            "localRotation": Quat.fromVec3Degrees({"x": 90, "y": playersMoneyHandlerPosition[playerNo].rotation, "z": 180}),
+            "type": "Shape",
+            "shape": "Cube",
+            "dimensions": {"x": 0.01, "y": 0.01, "z": 0.01},
+            "name": "Player_" + playerNo + "_MoneyHandler",
+            "visible": false,
+            "grab": {
+                "grabbable": false
+            }
+        },"local");
+        var autoChange = amountToAutoChange(amount);
+        var actionScript = "";
+        if (avatarID === MyAvatar.sessionUUID) {
+            actionScript = ROOT + "betOneToken.js";
+        }
+        var nbrTokenInStack, stack, exponent, position;
+        for (var i = autoChange.length - 1; i >= 0; i--) {
+            stack = autoChange.substr(i, 1);
+            if (stack === "T") {
+                nbrTokenInStack = 10;
+            } else {
+                nbrTokenInStack = parseInt(stack, 10);
+            }
+            exponent = i - autoChange.length - 1;
+            position = {"x": (-i * 0.055), "y": 0, "z": 0};
+            genMoneyStack(playersMoneyIDs[playerNo], nbrTokenInStack, position, exponent, actionScript);
+        }
+    }
+
+    function genMoneyStack(parentID, nbrTokenInStack, localPosition, exponent, actionScript) {
+        var id = Entities.addEntity({
+            "parentID": parentID,
+            "renderWithZones": thisRenderWithZones,
+            "name": "Money",
+            "localPosition": localPosition,
+            "dimensions": {"x": 0.0508, "y": 0.012 * nbrTokenInStack, "z": 0.0508},
+            "grab": {
+                "grabbable": false
+            },
+            "modelURL": ROOT +  "tokens/token.fbx",
+            "script": actionScript,
+            "description": "" + (10^exponent),
+            "useOriginalPivot": true,
+            "type": "model"
+        },"local");
+    }
+
+    function clearPlayerMoney(playerNo) {
+        if (playersMoneyIDs[playerNo] !== Uuid.NULL) {
+            Entities.deleteEntity(playersMoneyIDs[playerNo]);
+            playersMoneyIDs[playerNo] = Uuid.NULL;
+        }
+    }
+
     function amountToAutoChange(amount) {
         var strAmount = "" + amount;
         var autoChange = "";
@@ -159,15 +245,6 @@
         return autoChange;
     }
 
-    function clearAllCards() {
-        for (var i = 0; i < playersCardsIDs.length; i++) {
-            if (playersCardsIDs[i] !== Uuid.NULL) {
-                Entities.deleteEntity(playersCardsIDs[i]);
-                playersCardsIDs[i] = Uuid.NULL;
-            }
-        }
-    }
-    
     this.unload = function(entityID) {
         /*
         if (Id !== Uuid.NULL) {
@@ -176,7 +253,11 @@
         }
         */
         clearAllCards();
- 
+        
+        for (var i = 1; i < playersMoneyIDs.length; i++) {
+            clearPlayerMoney(i);
+        }
+        
         Messages.messageReceived.disconnect(onMessageReceived);
         Messages.unsubscribe(channelComm);
 
@@ -186,5 +267,41 @@
         //do nothing
     });    
 
+
+    /*
+     * Converts an HSL color value to RGB. Conversion formula
+     * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
+     * Assumes h, s, and l are contained in the set [0, 1] and
+     * returns r, g, and b in the set [0, 255].
+     *
+     * @param   {number}  h       The hue
+     * @param   {number}  s       The saturation
+     * @param   {number}  l       The lightness
+     * @return  {Array}           The RGB representation
+     */
+    function hslToRgb(h, s, l){
+        var r, g, b;
+
+        if(s == 0){
+            r = g = b = l; // achromatic
+        }else{
+            var hue2rgb = function hue2rgb(p, q, t){
+                if(t < 0) t += 1;
+                if(t > 1) t -= 1;
+                if(t < 1/6) return p + (q - p) * 6 * t;
+                if(t < 1/2) return q;
+                if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                return p;
+            }
+
+            var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+            var p = 2 * l - q;
+            r = hue2rgb(p, q, h + 1/3);
+            g = hue2rgb(p, q, h);
+            b = hue2rgb(p, q, h - 1/3);
+        }
+
+        return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+    }
 
 })
