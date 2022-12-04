@@ -48,6 +48,18 @@
             } else if (data.action === "CLEAR_PLAYER_MONEY") {
                 playerNo = parseInt(data.playerNo, 10);
                 clearPlayerMoney(playerNo);
+            } else if (data.action === "DISPLAY_PLAYER_BET") {
+                playerNo = parseInt(data.playerNo, 10);
+                drawPlayerBet(playerNo, data.amount, data.avatarID);
+            } else if (data.action === "CLEAR_PLAYER_BET") {
+                playerNo = parseInt(data.playerNo, 10);
+                clearPlayerBet(playerNo);
+            } else if (data.action === "DISPLAY_PLAYER_INSURANCE") {
+                playerNo = parseInt(data.playerNo, 10);
+                drawPlayerInsurance(playerNo, data.amount, data.avatarID);
+            } else if (data.action === "CLEAR_PLAYER_INSURANCE") {
+                playerNo = parseInt(data.playerNo, 10);
+                clearPlayerInsurance(playerNo);
             }
         }
     }
@@ -136,10 +148,10 @@
     
     var playersMoneyHandlerPosition = [
         {"localPosition": {"x": 0, "y": 0, "z": 0}, "rotation": 0}, //croupier, NEVER USED
-        {"localPosition": {"x": 0.6445, "y": 1.0664, "z": -0.7723}, "rotation": 54}, //player 1
-        {"localPosition": {"x": 0.1106, "y": 1.0664, "z": -0.9917}, "rotation": 18}, //player 2 
-        {"localPosition": {"x":-0.4990, "y": 1.0664, "z": -0.8618}, "rotation": -18}, //player 3
-        {"localPosition": {"x": -0.9533, "y": 1.0664, "z": -0.3847}, "rotation": -54}, //player 4
+        {"localPosition": {"x": 0.6445, "y": 1.06, "z": -0.7723}, "rotation": 54}, //player 1
+        {"localPosition": {"x": 0.1106, "y": 1.06, "z": -0.9917}, "rotation": 18}, //player 2 
+        {"localPosition": {"x":-0.4990, "y": 1.06, "z": -0.8618}, "rotation": -18}, //player 3
+        {"localPosition": {"x": -0.9533, "y": 1.06, "z": -0.3847}, "rotation": -54}, //player 4
     ];
 
     function drawPlayerMoney(playerNo, amount, avatarID) {
@@ -179,6 +191,100 @@
             }
         }
     }
+
+    var playersBetIDs = [Uuid.NULL, Uuid.NULL, Uuid.NULL, Uuid.NULL, Uuid.NULL];
+    
+    var playersBetHandlerPosition = [
+        {"localPosition": {"x": 0, "y": 0, "z": 0}, "rotation": 0}, //croupier, NEVER USED
+        {"localPosition": {"x": 0.6445, "y": 1.0664, "z": -0.7723}, "rotation": 54}, //player 1
+        {"localPosition": {"x": 0.1106, "y": 1.0664, "z": -0.9917}, "rotation": 18}, //player 2 
+        {"localPosition": {"x":-0.4990, "y": 1.0664, "z": -0.8618}, "rotation": -18}, //player 3
+        {"localPosition": {"x": -0.9533, "y": 1.0664, "z": -0.3847}, "rotation": -54}, //player 4
+    ];
+
+    function drawPlayerBet(playerNo, amount, avatarID) {
+        clearPlayerMoney(playerNo);
+        //create handler
+        if (amount > 0) {
+            playersBetIDs[playerNo] = Entities.addEntity({
+                "parentID": thisEntityID,
+                "renderWithZones": thisRenderWithZones,
+                "localPosition": playersBetHandlerPosition[playerNo].localPosition,
+                "localRotation": Quat.fromVec3Degrees({"x": 90, "y": playersBetHandlerPosition[playerNo].rotation, "z": 180}),
+                "type": "Shape",
+                "shape": "Cube",
+                "dimensions": {"x": 0.01, "y": 0.01, "z": 0.01},
+                "name": "Player_" + playerNo + "_MoneyHandler",
+                "visible": false,
+                "grab": {
+                    "grabbable": false
+                }
+            },"local");
+            var autoChange = amountToAutoChange(amount);
+            var actionScript = "";
+            if (avatarID === MyAvatar.sessionUUID) {
+                actionScript = ROOT + "unbetOneToken.js";
+            }
+            var nbrTokenInStack, stack, exponent, position;
+            for (var i = autoChange.length - 1; i >= 0; i--) {
+                stack = autoChange.substr(i, 1);
+                if (stack === "T") {
+                    nbrTokenInStack = 10;
+                } else {
+                    nbrTokenInStack = parseInt(stack, 10);
+                }
+                exponent = (autoChange.length - 1) - i;
+                position = {"x": (-exponent * 0.055), "y": 0, "z": 0};
+                genMoneyStack(playersBetIDs[playerNo], nbrTokenInStack, position, exponent, actionScript);
+            }
+        }
+    }
+
+    var playersInsuranceIDs = [Uuid.NULL, Uuid.NULL, Uuid.NULL, Uuid.NULL, Uuid.NULL];
+    
+    var playersInsuranceHandlerPosition = [
+        {"localPosition": {"x": 0, "y": 0, "z": 0}, "rotation": 0}, //croupier, NEVER USED
+        {"localPosition": {"x": 0.6445, "y": 1.06, "z": -0.7723}, "rotation": 54}, //player 1
+        {"localPosition": {"x": 0.1106, "y": 1.06, "z": -0.9917}, "rotation": 18}, //player 2 
+        {"localPosition": {"x":-0.4990, "y": 1.06, "z": -0.8618}, "rotation": -18}, //player 3
+        {"localPosition": {"x": -0.9533, "y": 1.06, "z": -0.3847}, "rotation": -54}, //player 4
+    ];
+
+    function drawPlayerInsurance(playerNo, amount, avatarID) {
+        clearPlayerInsurance(playerNo);
+        //create handler
+        if (amount > 0) {
+            playersInsuranceIDs[playerNo] = Entities.addEntity({
+                "parentID": thisEntityID,
+                "renderWithZones": thisRenderWithZones,
+                "localPosition": playersInsuranceHandlerPosition[playerNo].localPosition,
+                "localRotation": Quat.fromVec3Degrees({"x": 90, "y": playersInsuranceHandlerPosition[playerNo].rotation, "z": 180}),
+                "type": "Shape",
+                "shape": "Cube",
+                "dimensions": {"x": 0.01, "y": 0.01, "z": 0.01},
+                "name": "Player_" + playerNo + "_InsuranceHandler",
+                "visible": false,
+                "grab": {
+                    "grabbable": false
+                }
+            },"local");
+            var autoChange = amountToAutoChange(amount);
+            var actionScript = "";
+            var nbrTokenInStack, stack, exponent, position;
+            for (var i = autoChange.length - 1; i >= 0; i--) {
+                stack = autoChange.substr(i, 1);
+                if (stack === "T") {
+                    nbrTokenInStack = 10;
+                } else {
+                    nbrTokenInStack = parseInt(stack, 10);
+                }
+                exponent = (autoChange.length - 1) - i;
+                position = {"x": (-exponent * 0.055), "y": 0, "z": 0};
+                genMoneyStack(playersInsuranceIDs[playerNo], nbrTokenInStack, position, exponent, actionScript);
+            }
+        }
+    }
+
 
     function genMoneyStack(parentID, nbrTokenInStack, localPosition, exponent, actionScript) {
         var id = Entities.addEntity({
@@ -280,6 +386,20 @@
         }
     }
 
+    function clearPlayerBet(playerNo) {
+        if (playersBetIDs[playerNo] !== Uuid.NULL) {
+            Entities.deleteEntity(playersBetIDs[playerNo]);
+            playersBetIDs[playerNo] = Uuid.NULL;
+        }
+    }
+
+    function clearPlayerInsurance(playerNo) {
+        if (playersInsuranceIDs[playerNo] !== Uuid.NULL) {
+            Entities.deleteEntity(playersInsuranceIDs[playerNo]);
+            playersInsuranceIDs[playerNo] = Uuid.NULL;
+        }
+    }
+    
     function amountToAutoChange(amount) {
         var strAmount = "" + amount;
         var autoChange = "";
@@ -333,6 +453,8 @@
         
         for (var i = 1; i < playersMoneyIDs.length; i++) {
             clearPlayerMoney(i);
+            clearPlayerBet(i);
+            clearPlayerInsurance(i);
         }
         
         Messages.messageReceived.disconnect(onMessageReceived);
