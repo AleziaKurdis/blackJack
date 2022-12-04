@@ -234,6 +234,7 @@
             "grab": {
                 "grabbable": false
             },
+            "materialURL": "materialData",
             "materialData": JSON.stringify(materialData),
             "type": "Material",
             "priority": 2,
@@ -263,6 +264,7 @@
                 "grabbable": false
             },
             "materialData": JSON.stringify(materialData),
+            "materialURL": "materialData",
             "type": "Material",
             "priority": 2,
             "parentMaterialName": "mat::SIDE",
