@@ -173,6 +173,7 @@
                 nbrTokenInStack = parseInt(stack, 10);
             }
             exponent = i - autoChange.length - 1;
+            print("EXPONENT: " + exponent); //####################################################################DEBUG
             position = {"x": (-i * 0.055), "y": 0, "z": 0};
             genMoneyStack(playersMoneyIDs[playerNo], nbrTokenInStack, position, exponent, actionScript);
         }
@@ -195,7 +196,7 @@
             "useOriginalPivot": true,
             "type": "Model"
         },"local");
-        
+        return; //########################################################################################DEBUG
         var tokenDisplay = [
             {"hue": 0, "faceUrl": ROOT + "tokens/token_1_normal.jpg"},
             {"hue": 120, "faceUrl": ROOT + "tokens/token_10_normal.jpg"},
