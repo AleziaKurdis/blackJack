@@ -70,10 +70,10 @@
     var playerActionsID = Uuid.NULL;
     var actionsHandlerPosition = [
         {"localPosition": {"x": 0, "y": 0, "z": 0}, "rotation": 0}, //croupier, NEVER USED.
-        {"localPosition": {"x": 0.9995, "y": 1.079, "z": -0.4274}, "rotation": 54}, //player 1
-        {"localPosition": {"x": 0.6020, "y": 1.079, "z": -0.9209}, "rotation": 18}, //player 2 
-        {"localPosition": {"x": -0.0698, "y": 1.079, "z": -1.0932}, "rotation": -18}, //player 3
-        {"localPosition": {"x": -0.7250, "y": 1.079, "z": -0.8095}, "rotation": -54}, //player 4
+        {"localPosition": {"x": 0.9995, "y": 1.071, "z": -0.4274}, "rotation": 54}, //player 1
+        {"localPosition": {"x": 0.6020, "y": 1.071, "z": -0.9209}, "rotation": 18}, //player 2 
+        {"localPosition": {"x": -0.0698, "y": 1.071, "z": -1.0932}, "rotation": -18}, //player 3
+        {"localPosition": {"x": -0.7250, "y": 1.071, "z": -0.8095}, "rotation": -54}, //player 4
     ];
     
     function drawPlayerActions(playerNo, actionsList) {
@@ -96,14 +96,14 @@
         var position, id, actionScript;
         if (actionsList.length > 0) {
             for (var i = 0; i < actionsList.length; i++) {
-                position = {"x": (i * 0.054), "y": 0, "z": 0};
+                position = {"x": (i * 0.07), "y": 0, "z": 0};
                 actionScript = ROOT + "action_" + actionsList[i].toLowerCase() + ".js";
                 id = Entities.addEntity({
                     "parentID": playerActionsID,
                     "renderWithZones": thisRenderWithZones,
                     "name": "Action_" + actionsList[i],
                     "localPosition": position,
-                    "dimensions": {"x": 0.05, "y": 0.025, "z": 0.01},
+                    "dimensions": {"x": 0.065, "y": 0.032, "z": 0.01},
                     "grab": {
                         "grabbable": false
                     },
@@ -135,6 +135,7 @@
             "backgroundAlpha": 0,
             "unlit": true,
             "alignment": "right",
+            "topMargin": 0.01,
             "type": "Text"
         },"local");
     }
