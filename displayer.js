@@ -124,13 +124,13 @@
             "parentID": playerActionsID,
             "renderWithZones": thisRenderWithZones,
             "name": "Action_Timer",
-            "localPosition": {"x": (actionsList.length * 0.05), "y": 0, "z": 0};,
+            "localPosition": {"x": (actionsList.length * 0.05), "y": 0, "z": 0},
             "dimensions": {"x": 0.15, "y": 0.03, "z": 0.01},
             "grab": {
                 "grabbable": false
             },
             "text": countDownPrefix + countDown + " sec.",
-            "textColor": {"red": 255, "green": 255, "blue": 255},
+            "textColor": {"red": 132, "green": 128, "blue": 255},
             "lineHeight": 0.02,
             "backgroundAlpha": 0,
             "unlit": true,
