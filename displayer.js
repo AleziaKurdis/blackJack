@@ -196,10 +196,10 @@
     
     var playersBetHandlerPosition = [
         {"localPosition": {"x": 0, "y": 0, "z": 0}, "rotation": 0}, //croupier, NEVER USED
-        {"localPosition": {"x": 0.4706, "y": 1.048, "z": -0.4733}, "rotation": 54}, //player 1
-        {"localPosition": {"x": 0.1160, "y": 1.048, "z": -0.6607}, "rotation": 18}, //player 2 
-        {"localPosition": {"x":-0.2886, "y": 1.048, "z": -0.6022}, "rotation": -18}, //player 3
-        {"localPosition": {"x": -0.6056, "y": 1.048, "z": -0.2858}, "rotation": -54}, //player 4
+        {"localPosition": {"x": 0.4706, "y": 1.049, "z": -0.4733}, "rotation": 54}, //player 1
+        {"localPosition": {"x": 0.1160, "y": 1.049, "z": -0.6607}, "rotation": 18}, //player 2 
+        {"localPosition": {"x":-0.2886, "y": 1.049, "z": -0.6022}, "rotation": -18}, //player 3
+        {"localPosition": {"x": -0.6056, "y": 1.049, "z": -0.2858}, "rotation": -54}, //player 4
     ];
 
     function drawPlayerBet(playerNo, amount, avatarID) {
