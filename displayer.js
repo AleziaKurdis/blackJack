@@ -219,7 +219,7 @@
                 {
                   "albedo": [color[0]/255, color[1]/255, color[2]/255 ],
                   "metallic": 1,
-                  "roughness": 0.15,
+                  "roughness": 0.1,
                   "normalMap": tokenDisplay[exponent].faceUrl,
                   "cullFaceMode": "CULL_BACK"
                 }
@@ -249,7 +249,7 @@
                 {
                   "albedo": [color[0]/255, color[1]/255, color[2]/255 ],
                   "metallic": 1,
-                  "roughness": 0.15,
+                  "roughness": 0.1,
                   "normalMap": ROOT + "tokens/side_normal.jpg",
                   "cullFaceMode": "CULL_BACK"
                 }
