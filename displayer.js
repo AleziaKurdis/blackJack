@@ -145,36 +145,38 @@
     function drawPlayerMoney(playerNo, amount, avatarID) {
         clearPlayerMoney(playerNo);
         //create handler
-        playersMoneyIDs[playerNo] = Entities.addEntity({
-            "parentID": thisEntityID,
-            "renderWithZones": thisRenderWithZones,
-            "localPosition": playersMoneyHandlerPosition[playerNo].localPosition,
-            "localRotation": Quat.fromVec3Degrees({"x": 90, "y": playersMoneyHandlerPosition[playerNo].rotation, "z": 180}),
-            "type": "Shape",
-            "shape": "Cube",
-            "dimensions": {"x": 0.01, "y": 0.01, "z": 0.01},
-            "name": "Player_" + playerNo + "_MoneyHandler",
-            "visible": false,
-            "grab": {
-                "grabbable": false
+        if (amount > 0) {
+            playersMoneyIDs[playerNo] = Entities.addEntity({
+                "parentID": thisEntityID,
+                "renderWithZones": thisRenderWithZones,
+                "localPosition": playersMoneyHandlerPosition[playerNo].localPosition,
+                "localRotation": Quat.fromVec3Degrees({"x": 90, "y": playersMoneyHandlerPosition[playerNo].rotation, "z": 180}),
+                "type": "Shape",
+                "shape": "Cube",
+                "dimensions": {"x": 0.01, "y": 0.01, "z": 0.01},
+                "name": "Player_" + playerNo + "_MoneyHandler",
+                "visible": false,
+                "grab": {
+                    "grabbable": false
+                }
+            },"local");
+            var autoChange = amountToAutoChange(amount);
+            var actionScript = "";
+            if (avatarID === MyAvatar.sessionUUID) {
+                actionScript = ROOT + "betOneToken.js";
             }
-        },"local");
-        var autoChange = amountToAutoChange(amount);
-        var actionScript = "";
-        if (avatarID === MyAvatar.sessionUUID) {
-            actionScript = ROOT + "betOneToken.js";
-        }
-        var nbrTokenInStack, stack, exponent, position;
-        for (var i = autoChange.length - 1; i >= 0; i--) {
-            stack = autoChange.substr(i, 1);
-            if (stack === "T") {
-                nbrTokenInStack = 10;
-            } else {
-                nbrTokenInStack = parseInt(stack, 10);
+            var nbrTokenInStack, stack, exponent, position;
+            for (var i = autoChange.length - 1; i >= 0; i--) {
+                stack = autoChange.substr(i, 1);
+                if (stack === "T") {
+                    nbrTokenInStack = 10;
+                } else {
+                    nbrTokenInStack = parseInt(stack, 10);
+                }
+                exponent = (autoChange.length - 1) - i;
+                position = {"x": (-i * 0.055), "y": 0, "z": 0};
+                genMoneyStack(playersMoneyIDs[playerNo], nbrTokenInStack, position, exponent, actionScript);
             }
-            exponent = (autoChange.length - 1) - i;
-            position = {"x": (-i * 0.055), "y": 0, "z": 0};
-            genMoneyStack(playersMoneyIDs[playerNo], nbrTokenInStack, position, exponent, actionScript);
         }
     }
 
@@ -218,7 +220,7 @@
                   "albedo": [color[0]/255, color[1]/255, color[2]/255 ],
                   "metallic": 1,
                   "roughness": 0.15,
-                  "normalMap" = tokenDisplay[exponent].faceUrl
+                  "normalMap": tokenDisplay[exponent].faceUrl
                 }
             ]
         };
@@ -246,7 +248,7 @@
                   "albedo": [color[0]/255, color[1]/255, color[2]/255 ],
                   "metallic": 1,
                   "roughness": 0.15,
-                  "normalMap" = ROOT + "tokens/side_normal.jpg"
+                  "normalMap": ROOT + "tokens/side_normal.jpg"
                 }
             ]
         };        
