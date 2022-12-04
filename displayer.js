@@ -27,7 +27,7 @@
 
         Messages.subscribe(channelComm);
         Messages.messageReceived.connect(onMessageReceived);
-
+        Script.update.connect(myTimer);
     }
     
 
@@ -35,8 +35,11 @@
         var playerNo;
         if (channel === channelComm) {
             var data = JSON.parse(message);
-            if (data.action === "#######" && data.avatarID === MyAvatar.sessionUUID) {
+            if (data.action === "DISPLAY_ACTIONS" && data.avatarID === MyAvatar.sessionUUID) {
                 playerNo = parseInt(data.playerNo, 10);
+                drawPlayerActions(playerNo, data.actionsList);
+            } else if (data.action === "CLEAR_ACTIONS" && data.avatarID === MyAvatar.sessionUUID) {
+                clearPlayerActions();
             } else if (data.action === "DISPLAY_CARDS") {
                 playerNo = parseInt(data.playerNo, 10); //player 1 to 4, 0 being the croupier
                 displayHand(playerNo, data.hand);
@@ -61,6 +64,107 @@
                 playerNo = parseInt(data.playerNo, 10);
                 clearPlayerInsurance(playerNo);
             }
+        }
+    }
+
+    var playerActionsID = Uuid.NULL;
+    var actionsHandlerPosition = [
+        {"localPosition": {"x": 0, "y": 0, "z": 0}, "rotation": 0}, //croupier, NEVER USED.
+        {"localPosition": {"x": 0.7583, "y": 1.0664, "z": -0.4363}, "rotation": 54}, //player 1
+        {"localPosition": {"x": 0.3689, "y": 1.0664, "z": -0.8022}, "rotation": 18}, //player 2 
+        {"localPosition": {"x": -0.1467, "y": 1.0664, "z": -0.8686}, "rotation": -18}, //player 3
+        {"localPosition": {"x": -0.6194, "y": 1.0664, "z": -0.6026}, "rotation": -54}, //player 4
+    ];
+    
+    function drawPlayerActions(playerNo, actionsList) {
+        clearPlayerActions();
+        playerActionsID = Entities.addEntity({
+            "parentID": thisEntityID,
+            "renderWithZones": thisRenderWithZones,
+            "localPosition": actionsHandlerPosition[playerNo].localPosition,
+            "localRotation": Quat.fromVec3Degrees({"x": 90, "y": actionsHandlerPosition[playerNo].rotation, "z": 180}),
+            "type": "Shape",
+            "shape": "Cube",
+            "dimensions": {"x": 0.01, "y": 0.01, "z": 0.01},
+            "name": "Actions Handler",
+            "visible": false,
+            "grab": {
+                "grabbable": false
+            }
+        },"local");
+        
+        var position, id, actionScript;
+        if (actionsList.length > 0) {
+            for (var i = 0; i < actionsList.length; i++) {
+                position = {"x": (i * 0.05), "y": 0, "z": 0};
+                actionScript = ROOT + "action_" + actionsList[i].toLowerCase() + ".js";
+                id = Entities.addEntity({
+                    "parentID": playerActionsID,
+                    "renderWithZones": thisRenderWithZones,
+                    "name": "Action_" + actionsList[i],
+                    "localPosition": position,
+                    "dimensions": {"x": 0.045, "y": 0.02, "z": 0.01},
+                    "grab": {
+                        "grabbable": false
+                    },
+                    "imageURL": ROOT +  "actions/" + actionsList[i].toLowerCase() + ".jpg",
+                    "emissive": true,
+                    "script": actionScript,
+                    "type": "Image"
+                },"local");
+            }
+        }
+        //Countdown here!
+        countDownPrefix = "";
+        if (actionsList.length === 0) {
+            countDownPrefix = "TIME TO BET: ";
+        }
+        countDown = 30;
+        countDownID = Entities.addEntity({
+            "parentID": playerActionsID,
+            "renderWithZones": thisRenderWithZones,
+            "name": "Action_Timer",
+            "localPosition": {"x": (actionsList.length * 0.05), "y": 0, "z": 0};,
+            "dimensions": {"x": 0.15, "y": 0.03, "z": 0.01},
+            "grab": {
+                "grabbable": false
+            },
+            "text": countDownPrefix + countDown + " sec.",
+            "textColor": {"red": 255, "green": 255, "blue": 255},
+            "lineHeight": 0.02,
+            "backgroundAlpha": 0,
+            "unlit": true,
+            "alignment": "right",
+            "type": "Text"
+        },"local");
+    }
+    
+    var countDown = 0;
+    var countDownPrefix = "";
+    var countDownID = Uuid.Null;
+    var TIMER_INTERVAL = 1000; //1sec
+    var processTimer = 0;
+    function myTimer(deltaTime) {
+        var today = new Date();
+        if ((today.getTime() - processTimer) > TIMER_INTERVAL) {
+            countDown = countDown -1;
+            if (countDown < 0) {
+                countDown = 0;
+            }
+            if (countDownID !== Uuid.Null) {
+                Entities.editEntity(countDownID, {"text": countDownPrefix + countDown + " sec."});
+            }
+            
+            today = new Date();
+            processTimer = today.getTime();
+        }
+    }
+
+    function clearPlayerActions() {
+        if (playerActionsID !== Uuid.NULL) {
+            Entities.deleteEntity(playerActionsID);
+            playerActionsID = Uuid.NULL;
+            countDownID = Uuid.Null;
         }
     }
 
@@ -443,12 +547,7 @@
     }
 
     this.unload = function(entityID) {
-        /*
-        if (Id !== Uuid.NULL) {
-            Entities.deleteEntity(Id);
-            Id = Uuid.NULL;
-        }
-        */
+        clearPlayerActions();
         clearAllCards();
         
         for (var i = 1; i < playersMoneyIDs.length; i++) {
@@ -459,7 +558,7 @@
         
         Messages.messageReceived.disconnect(onMessageReceived);
         Messages.unsubscribe(channelComm);
-
+        Script.update.disconnect(myTimer);
     };
 
     Script.scriptEnding.connect(function () {
