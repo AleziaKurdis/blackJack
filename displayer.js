@@ -148,10 +148,10 @@
     
     var playersMoneyHandlerPosition = [
         {"localPosition": {"x": 0, "y": 0, "z": 0}, "rotation": 0}, //croupier, NEVER USED
-        {"localPosition": {"x": 0.6445, "y": 1.062, "z": -0.7723}, "rotation": 54}, //player 1
-        {"localPosition": {"x": 0.1106, "y": 1.062, "z": -0.9917}, "rotation": 18}, //player 2 
-        {"localPosition": {"x":-0.4990, "y": 1.062, "z": -0.8618}, "rotation": -18}, //player 3
-        {"localPosition": {"x": -0.9533, "y": 1.062, "z": -0.3847}, "rotation": -54}, //player 4
+        {"localPosition": {"x": 0.6445, "y": 1.063, "z": -0.7723}, "rotation": 54}, //player 1
+        {"localPosition": {"x": 0.1106, "y": 1.063, "z": -0.9917}, "rotation": 18}, //player 2 
+        {"localPosition": {"x":-0.4990, "y": 1.063, "z": -0.8618}, "rotation": -18}, //player 3
+        {"localPosition": {"x": -0.9533, "y": 1.063, "z": -0.3847}, "rotation": -54}, //player 4
     ];
 
     function drawPlayerMoney(playerNo, amount, avatarID) {
@@ -196,10 +196,10 @@
     
     var playersBetHandlerPosition = [
         {"localPosition": {"x": 0, "y": 0, "z": 0}, "rotation": 0}, //croupier, NEVER USED
-        {"localPosition": {"x": 0.4706, "y": 1.0501, "z": -0.4733}, "rotation": 54}, //player 1
-        {"localPosition": {"x": 0.1160, "y": 1.0501, "z": -0.6607}, "rotation": 18}, //player 2 
-        {"localPosition": {"x":-0.2886, "y": 1.0501, "z": -0.6022}, "rotation": -18}, //player 3
-        {"localPosition": {"x": -0.6056, "y": 1.0501, "z": -0.2858}, "rotation": -54}, //player 4
+        {"localPosition": {"x": 0.4706, "y": 1.0498, "z": -0.4733}, "rotation": 54}, //player 1
+        {"localPosition": {"x": 0.1160, "y": 1.0498, "z": -0.6607}, "rotation": 18}, //player 2 
+        {"localPosition": {"x":-0.2886, "y": 1.0498, "z": -0.6022}, "rotation": -18}, //player 3
+        {"localPosition": {"x": -0.6056, "y": 1.0498, "z": -0.2858}, "rotation": -54}, //player 4
     ];
 
     function drawPlayerBet(playerNo, amount, avatarID) {
@@ -244,10 +244,10 @@
     
     var playersInsuranceHandlerPosition = [
         {"localPosition": {"x": 0, "y": 0, "z": 0}, "rotation": 0}, //croupier, NEVER USED
-        {"localPosition": {"x": 0.5478, "y": 1.062, "z":-0.5086}, "rotation": 54}, //player 1
-        {"localPosition": {"x": 0.1084, "y": 1.062, "z": -0.7463}, "rotation": 18}, //player 2 
-        {"localPosition": {"x": -0.3501, "y": 1.062, "z": -0.6680}, "rotation": -18}, //player 3
-        {"localPosition": {"x": -0.6857, "y": 1.062, "z": -0.3405}, "rotation": -54}, //player 4
+        {"localPosition": {"x": 0.5478, "y": 1.063, "z":-0.5086}, "rotation": 54}, //player 1
+        {"localPosition": {"x": 0.1084, "y": 1.063, "z": -0.7463}, "rotation": 18}, //player 2 
+        {"localPosition": {"x": -0.3501, "y": 1.063, "z": -0.6680}, "rotation": -18}, //player 3
+        {"localPosition": {"x": -0.6857, "y": 1.063, "z": -0.3405}, "rotation": -54}, //player 4
     ];
 
     function drawPlayerInsurance(playerNo, amount, avatarID) {
