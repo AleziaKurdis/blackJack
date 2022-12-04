@@ -185,7 +185,7 @@
             "name": "Money",
             "localPosition": localPosition,
             "localRotation": Quat.fromVec3Degrees({"x": 90, "y": 0, "z": 0}),
-            "dimensions": {"x": 0.0508, "y": 0.012 * nbrTokenInStack, "z": 0.0508},
+            "dimensions": {"x": 0.0508, "y": 0.007 * nbrTokenInStack, "z": 0.0508},
             "grab": {
                 "grabbable": false
             },
