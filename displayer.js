@@ -195,6 +195,66 @@
             "useOriginalPivot": true,
             "type": "Model"
         },"local");
+        
+        var tokenDisplay = [
+            {"hue": 0, "faceUrl": ROOT + "tokens/token_1_normal.jpg"},
+            {"hue": 120, "faceUrl": ROOT + "tokens/token_10_normal.jpg"},
+            {"hue": 240, "faceUrl": ROOT + "tokens/token_100_normal.jpg"},
+            {"hue": 60, "faceUrl": ROOT + "tokens/token_1K_normal.jpg"},
+            {"hue": 180, "faceUrl": ROOT + "tokens/token_10K_normal.jpg"},
+            {"hue": 300, "faceUrl": ROOT + "tokens/token_100K_normal.jpg"},
+            {"hue": 30, "faceUrl": ROOT + "tokens/token_1M_normal.jpg"},
+            {"hue": 210, "faceUrl": ROOT + "tokens/token_10M_normal.jpg"},
+            {"hue": 270, "faceUrl": ROOT + "tokens/token_100M_normal.jpg"},
+            {"hue": 90, "faceUrl": ROOT + "tokens/token_1G_normal.jpg"}
+        ];
+        
+        var color = hslToRgb(tokenDisplay[exponent].hue/360, 1, 0.5);
+        
+        var materialData = {
+            "materialVersion": 1,
+            "materials": [
+                {
+                  "albedo": [color[0]/255, color[1]/255, color[2]/255 ],
+                  "metallic": 1,
+                  "roughness": 0.15
+                }
+            ]
+        };
+        
+        materialData.normalMap = tokenDisplay[exponent].faceUrl;
+        var matId = Entities.addEntity({
+            "parentID": id,
+            "renderWithZones": thisRenderWithZones,
+            "name": "Face Material",
+            "localPosition": {"x": 0, "y": 1, "z": 0},
+            "grab": {
+                "grabbable": false
+            },
+            "materialData": JSON.stringify(materialData),
+            "type": "Material",
+            "priority": 2,
+            "parentMaterialName": "mat::FACE",
+            "materialMappingScale": { "x": 1, "y": 1 },
+            "materialRepeat": true
+        },"local");
+        
+        materialData.normalMap =  ROOT + "tokens/side_normal.jpg";
+        matId = Entities.addEntity({
+            "parentID": id,
+            "renderWithZones": thisRenderWithZones,
+            "name": "Side Material",
+            "localPosition": {"x": 0, "y": 1.4, "z": 0},
+            "grab": {
+                "grabbable": false
+            },
+            "materialData": JSON.stringify(materialData),
+            "type": "Material",
+            "priority": 2,
+            "parentMaterialName": "mat::SIDE",
+            "materialMappingScale": { "x": 1, "y": nbrTokenInStack },
+            "materialRepeat": true
+        },"local");
     }
 
     function clearPlayerMoney(playerNo) {
