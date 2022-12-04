@@ -124,7 +124,7 @@
             "parentID": playerActionsID,
             "renderWithZones": thisRenderWithZones,
             "name": "Action_Timer",
-            "localPosition": {"x": (actionsList.length * 0.07), "y": 0, "z": 0},
+            "localPosition": {"x": (actionsList.length * 0.07), "y": 0, "z": -0.01},
             "dimensions": {"x": 0.15, "y": 0.025, "z": 0.01},
             "grab": {
                 "grabbable": false
