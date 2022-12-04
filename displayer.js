@@ -149,7 +149,7 @@
             "parentID": thisEntityID,
             "renderWithZones": thisRenderWithZones,
             "localPosition": playersMoneyHandlerPosition[playerNo].localPosition,
-            "localRotation": Quat.fromVec3Degrees({"x": 90, "y": playersMoneyHandlerPosition[playerNo].rotation, "z": 90}),
+            "localRotation": Quat.fromVec3Degrees({"x": 90, "y": playersMoneyHandlerPosition[playerNo].rotation, "z": 180}),
             "type": "Shape",
             "shape": "Cube",
             "dimensions": {"x": 0.01, "y": 0.01, "z": 0.01},
@@ -184,6 +184,7 @@
             "renderWithZones": thisRenderWithZones,
             "name": "Money",
             "localPosition": localPosition,
+            "localRotation": Quat.fromVec3Degrees({"x": 90, "y": 0, "z": 0}),
             "dimensions": {"x": 0.0508, "y": 0.012 * nbrTokenInStack, "z": 0.0508},
             "grab": {
                 "grabbable": false
