@@ -174,7 +174,7 @@
                     nbrTokenInStack = parseInt(stack, 10);
                 }
                 exponent = (autoChange.length - 1) - i;
-                position = {"x": (-i * 0.055), "y": 0, "z": 0};
+                position = {"x": (-exponent * 0.055), "y": 0, "z": 0};
                 genMoneyStack(playersMoneyIDs[playerNo], nbrTokenInStack, position, exponent, actionScript);
             }
         }
