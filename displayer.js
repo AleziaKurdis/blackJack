@@ -149,7 +149,7 @@
             "parentID": thisEntityID,
             "renderWithZones": thisRenderWithZones,
             "localPosition": playersMoneyHandlerPosition[playerNo].localPosition,
-            "localRotation": Quat.fromVec3Degrees({"x": 90, "y": playersMoneyHandlerPosition[playerNo].rotation, "z": 180}),
+            "localRotation": Quat.fromVec3Degrees({"x": 90, "y": playersMoneyHandlerPosition[playerNo].rotation, "z": 90}),
             "type": "Shape",
             "shape": "Cube",
             "dimensions": {"x": 0.01, "y": 0.01, "z": 0.01},
@@ -179,7 +179,6 @@
     }
 
     function genMoneyStack(parentID, nbrTokenInStack, localPosition, exponent, actionScript) {
-        print("Called2"); //###############################################################################################TRASH DEBUG Print
         var id = Entities.addEntity({
             "parentID": parentID,
             "renderWithZones": thisRenderWithZones,
