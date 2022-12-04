@@ -173,7 +173,6 @@
                 nbrTokenInStack = parseInt(stack, 10);
             }
             exponent = (autoChange.length - 1) - i;
-            print("EXPONENT: " + exponent + " i:" + i + " length:" + autoChange.length); //####################################################################DEBUG
             position = {"x": (-i * 0.055), "y": 0, "z": 0};
             genMoneyStack(playersMoneyIDs[playerNo], nbrTokenInStack, position, exponent, actionScript);
         }
@@ -218,12 +217,12 @@
                 {
                   "albedo": [color[0]/255, color[1]/255, color[2]/255 ],
                   "metallic": 1,
-                  "roughness": 0.15
+                  "roughness": 0.15,
+                  "normalMap" = tokenDisplay[exponent].faceUrl
                 }
             ]
         };
         
-        materialData.normalMap = tokenDisplay[exponent].faceUrl;
         var matId = Entities.addEntity({
             "parentID": id,
             "renderWithZones": thisRenderWithZones,
@@ -240,7 +239,17 @@
             "materialRepeat": true
         },"local");
         
-        materialData.normalMap =  ROOT + "tokens/side_normal.jpg";
+        materialData = {
+            "materialVersion": 1,
+            "materials": [
+                {
+                  "albedo": [color[0]/255, color[1]/255, color[2]/255 ],
+                  "metallic": 1,
+                  "roughness": 0.15,
+                  "normalMap" = ROOT + "tokens/side_normal.jpg"
+                }
+            ]
+        };        
         matId = Entities.addEntity({
             "parentID": id,
             "renderWithZones": thisRenderWithZones,
