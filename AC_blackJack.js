@@ -561,7 +561,7 @@ function myTimer(deltaTime) {
                     }
                 }
                 break;
-            case "ACTIONS"
+            case "ACTIONS":
                 countDown = countDown -1;
                 if (countDown === 0) {
                     message = {
