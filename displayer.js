@@ -19,17 +19,20 @@
 
     var thisEntityID = Uuid.NULL;
     var thisRenderWithZones;
-
+    var SOUND_FLIP, SOUND_COINS;
+    
     this.preload = function(entityID) {
         thisEntityID = entityID;
         var properties = Entities.getEntityProperties(entityID,["renderWithZones", "position"]);
         thisRenderWithZones = properties.renderWithZones;
 
+        SOUND_FLIP = SoundCache.getSound(ROOT + "sounds/flip.wav");
+        SOUND_COINS = SoundCache.getSound(ROOT + "sounds/coins.wav");
+
         Messages.subscribe(channelComm);
         Messages.messageReceived.connect(onMessageReceived);
         Script.update.connect(myTimer);
     }
-    
 
     function onMessageReceived(channel, message, sender, localOnly) {
         var playerNo;
@@ -63,6 +66,22 @@
             } else if (data.action === "CLEAR_PLAYER_INSURANCE") {
                 playerNo = parseInt(data.playerNo, 10);
                 clearPlayerInsurance(playerNo);
+            } else if (data.action === "SOUND_FLIP") {
+                var injectorOptions = {
+                    "position": Entities.getEntityProperties(thisEntityID,["position"]).position,
+                    "volume": 0.35,
+                    "loop": false,
+                    "localOnly": true
+                };
+                var injector = Audio.playSound(SOUND_FLIP, injectorOptions);
+            } else if (data.action === "SOUND_COINS") {
+                var injectorOptions2 = {
+                    "position": MyAvatar.position,
+                    "volume": 0.35,
+                    "loop": false,
+                    "localOnly": true
+                };
+                var injector2 = Audio.playSound(SOUND_COINS, injectorOptions2);
             }
         }
     }

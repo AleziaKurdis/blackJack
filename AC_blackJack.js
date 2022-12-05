@@ -15,10 +15,11 @@ var jsMainFileName = "AC_blackJack.js";
 var ROOT = Script.resolvePath('').split(jsMainFileName)[0];
 
 var channelComm = "ak.blackJack.ac.communication";
-var ORIGIN_POSITION = {"x":8000,"y":8000,"z":8000};
+//var ORIGIN_POSITION = {"x":8000,"y":8000,"z":8000}; //################################################################
 
 var PROCESS_INTERVAL = 1000; //1 sec
 var processTimer = 0;
+var countDown = 0;
 
 var NEW_CARDS_PACK = [
     {"value": "A", "suit": "HEARTS"},
@@ -117,11 +118,10 @@ function playerSit(playerNo, avatarID){
         players[playerNo].bet = 0;
     }
     if (gameflowState === "OFF") {
-        Script.update.connect(myTimer);
+        countDown = -1;
         gameflowState = "BETTING";
+        Script.update.connect(myTimer);
     }
-    print("BLACKJACK Players: " + JSON.stringify(players)); //##################################################################DEBUG
-    print("BLACKJACK Persons: " + JSON.stringify(persons)); //##################################################################DEBUG
 }
 
 function getName(avatarID) {
@@ -156,19 +156,8 @@ function isAllPlayerOff() {
     return allOff;
 }
 
-function isAllPlayerHaveBet() {
-    var allbet = true;
-    for (var i = 1; i > players.length; i++) {
-        if (players[i].bet === 0) {
-            allbet = false;
-            break;
-        }
-    }
-    return allbet;
-}
-
 function onMessageReceived(channel, message, sender, localOnly) {
-    var playerNo;
+    var playerNo, messageToSend;
     if (channel === channelComm) {
         var data = JSON.parse(message);
         if (data.action === "PLAYER_SIT") {
@@ -181,40 +170,144 @@ function onMessageReceived(channel, message, sender, localOnly) {
                 Script.update.disconnect(myTimer);
                 gameflowState = "OFF";
             }
-        } else if  (data.action === "BET_CONFIRMED") {
-            playerNo = parseInt(data.playerNo, 10);
-            players[playerNo].bet = data.bet;
-            if (isAllPlayerHaveBet()) {
-                cardsDistribution();
-                gameflowState = "ACTIONS";
-                playerInProcess = 1;
-                sendActions();
+        } else if  (data.action === "BET") {
+            playerNo = getPlayerNoFromAvatarID(data.avatarID);
+            var bet = data.amount;
+            if (data.amount === 1 & players[playerNo].bet === 0) {
+                bet = 2;
             }
-        } else if  (data.action === "STAND") {
-                playerInProcess = playerInProcess + 1;
-                if (playerInProcess === 5) {
-                    croupierTurn();
-                }            
-        } else if  (data.action === "HIT") {
-            playerNo = parseInt(data.playerNo, 10);
+            players[playerNo].bet = players[playerNo].bet + bet;
+            persons[players[playerNo].person].cash = persons[players[playerNo].person].cash - bet;
+            updateCash(playerNo, true);
+        } else if  (data.action === "UNBET") {
+            playerNo = getPlayerNoFromAvatarID(data.avatarID);
+            var unbet = data.amount;
+            if (data.amount === 1 & players[playerNo].bet === 2) {
+                unbet = 2;
+            }
+            players[playerNo].bet = players[playerNo].bet - unbet;
+            persons[players[playerNo].person].cash = persons[players[playerNo].person].cash + unbet;
+            updateCash(playerNo, true);
+        } else if  (data.action === "ACTION_STAND") {
+            messageToSend = {
+                "action": "CLEAR_ACTIONS",
+                "avatarID": data.avatarID
+            };
+            Messages.sendMessage(channelComm, JSON.stringify(messageToSend));            
+            playerInProcess = playerInProcess + 1;
+            if (playerInProcess === 5) {
+                dealerTurn();
+            } else {
+                countDown = 30;
+                sendActions();  
+            }     
+        } else if (data.action === "ACTION_HIT") {
+            messageToSend = {
+                "action": "CLEAR_ACTIONS",
+                "avatarID": data.avatarID
+            };
+            Messages.sendMessage(channelComm, JSON.stringify(messageToSend));              
+            playerNo = getPlayerNoFromAvatarID(data.avatarID);
             players[playerNo].hand.push(drawAcard());
+            messageToSend = {
+                "action": "DISPLAY_CARDS",
+                "playerNo": playerNo,
+                "hand": players[playerNo].hand
+            };
+            Messages.sendMessage(channelComm, JSON.stringify(messageToSend));             
             if (checkCount(players[playerNo].hand) > 21) {
                 playerInProcess = playerInProcess + 1;
                 if (playerInProcess === 5) {
-                    croupierTurn();
+                    dealerTurn();
+                } else {
+                    countDown = 30;
+                    sendActions();  
                 }
+            } else {
+                countDown = 30;
+                sendActions();                
             }
-        } else if  (data.action === "SURRENDER") {
-            playerNo = parseInt(data.playerNo, 10);
-            players[playerNo].hand = [];    
-        } else if  (data.action === "INSURANCE") {
-            playerNo = parseInt(data.playerNo, 10);
+        } else if  (data.action === "ACTION_SURRENDER") {
+            messageToSend = {
+                "action": "CLEAR_ACTIONS",
+                "avatarID": data.avatarID
+            };
+            Messages.sendMessage(channelComm, JSON.stringify(messageToSend));              
+            playerNo = getPlayerNoFromAvatarID(data.avatarID);
+            players[playerNo].hand = []; //this means that he has surrendered.
+            messageToSend = {
+                "action": "DISPLAY_CARDS",
+                "playerNo": playerNo,
+                "hand": players[playerNo].hand
+            };
+            Messages.sendMessage(channelComm, JSON.stringify(messageToSend));
+            playerInProcess = playerInProcess + 1;
+            if (playerInProcess === 5) {
+                dealerTurn();
+            } else {
+                countDown = 30;
+                sendActions();  
+            }            
+        } else if  (data.action === "ACTION_INSURANCE") {
+            messageToSend = {
+                "action": "CLEAR_ACTIONS",
+                "avatarID": data.avatarID
+            };
+            Messages.sendMessage(channelComm, JSON.stringify(messageToSend));              
+            playerNo = getPlayerNoFromAvatarID(data.avatarID);            
             players[playerNo].insurance = true;
+            persons[players[playerNo].person].cash = persons[players[playerNo].person].cash - Math.floor(players[playerNo].bet / 2);
+            updateCash(playerNo, true);            
+            countDown = 30;
+            sendActions();
         }
     }
 }
+
+function getPlayerNoFromAvatarID(avatarID) {
+    var playerNo = 0;
+    for (var i = 1; i > players.length; i++) {
+        if (persons[players[i].person].avatarID === avatarID) {
+            playerNo = i;
+            break;
+        }
+    }
+    return playerNo;    
+}
+
+function updateCash(playerNo, isInteractive) {
+    var avatarID = "";
+    if (isInteractive) {
+        avatarID = persons[players[playerNo].person].avatarID;
+    }
+    var message = {
+        "action": "DISPLAY_PLAYER_MONEY",
+        "playerNo": playerNo,
+        "amount": persons[players[playerNo].person].cash,
+        "avatarID": avatarID
+    };
+    Messages.sendMessage(channelComm, JSON.stringify(message));   
+    message = {
+        "action": "DISPLAY_PLAYER_BET",
+        "playerNo": playerNo,
+        "amount": players[playerNo].bet,
+        "avatarID": avatarID
+    };
+    Messages.sendMessage(channelComm, JSON.stringify(message));
+    if (players[playerNo].insurance) {
+        message = {
+            "action": "DISPLAY_PLAYER_INSURANCE",
+            "playerNo": playerNo,
+            "amount": Math.floor(players[playerNo].bet / 2),
+            "avatarID": ""
+        };
+        Messages.sendMessage(channelComm, JSON.stringify(message));        
+    }
+}
+
 var hand = [];
 function cardsDistribution() {
+    var message;
     for (var i = 1; i > players.length; i++) {
         if (players[i].state === "PLAYING") {
             players[i].insurance = false;
@@ -222,43 +315,89 @@ function cardsDistribution() {
             players[i].hand.push(drawAcard());
             players[i].hand.push(drawAcard());
         }
-        //Send Card disply for each user
+        message = {
+            "action": "DISPLAY_CARDS",
+            "playerNo": i,
+            "hand": players[i].hand
+        };
+        Messages.sendMessage(channelComm, JSON.stringify(message));        
     }
     hand = [];
     hand.push(drawAcard());
-    //Send Card display for croupier
+    message = {
+        "action": "DISPLAY_CARDS",
+        "playerNo": 0,
+        "hand": hand
+    };
+    Messages.sendMessage(channelComm, JSON.stringify(message));     
 }
 
-function croupierTurn() {
+function dealerTurn() {
     hand.push(drawAcard());
-    var croupierScore = checkCount(hand);
+    var message = {
+        "action": "SOUND_FLIP"
+    };
+    Messages.sendMessage(channelComm, JSON.stringify(message));
+    message = {
+        "action": "DISPLAY_CARDS",
+        "playerNo": 0,
+        "hand": hand
+    };
+    Messages.sendMessage(channelComm, JSON.stringify(message));
+    var dealerScore = checkCount(hand);
     var playerScore = 0;
     for (vari = 1; i < players.length; i++) {
         if (players[i].state === "PLAYING") {
             if (players[i].hand.length === 0) {
                 //surrendered (lose half bet)
+                persons[players[i].person].cash = persons[players[i].person].cash + Math.floor(players[i].bet/2);
+                players[i].bet = 0;                
             } else {
                 playerScore = checkCount(players[i].hand);
                 if (playerScore > 21) {
                     if (isThisABlackJack(hand) &&  players[i].insurance) {
-                        //lose nothing
+                        //paid insurance garantie 2 time the bet
+                        persons[players[i].person].cash = persons[players[i].person].cash + (players[i].bet * 2);
+                        players[i].bet = 0;
                     } else {
                         //loose full bet
+                        players[i].bet = 0;
                     }
                 } else {
-                    if (playerScore > croupierScore) {
+                    if (playerScore > dealerScore) {
                         if (isThisABlackJack(players[i].hand)) {
-                            //win 1.5 X bet 
+                            //win 1.5 X bet + keep the bet
+                            persons[players[i].person].cash = persons[players[i].person].cash + players[i].bet + (players[i].bet * 1.5);
+                            players[i].bet = 0;  
                         } else {
-                            //win 1 X bet  
+                            //win 1 X bet + keep the bet
+                            persons[players[i].person].cash = persons[players[i].person].cash + (players[i].bet * 2);
+                            players[i].bet = 0;                            
                         }
+                    } else if (playerScore === dealerScore) {
+                        //safe: keep your bet
+                        persons[players[i].person].cash = persons[players[i].person].cash + players[i].bet;
+                        players[i].bet = 0;                          
+                    } else {
+                        //loose
+                        players[i].bet = 0;
                     }
                 }
             }
         }
+        message = {
+            "action": "SOUND_COINS"
+        };
+        Messages.sendMessage(channelComm, JSON.stringify(message));        
+        players[i].insurance = false;
+        updateCash(playerNo, false); 
         players[i].state === "JOINED";    
     }
-    //update rendering
+    //Cleanup the board.
+    message = {
+        "action": "CLEAR_ALL_CARDS"
+    };
+    Messages.sendMessage(channelComm, JSON.stringify(message));    
     gameflowState = "BETTING";
     playerInProcess = 1;
 }
@@ -273,17 +412,24 @@ function drawAcard() {
 }
 
 function sendActions() {
-    //playerInProcess
     var actionList = ["STAND"];
     if (!isThisABlackJack(players[playerInProcess].hand)) {
         actionList.push("HIT");
-        actionList.push("SURRENDER");
+        if (players[playerInProcess].isFirstAction) {
+            actionList.push("SURRENDER");
+        }
     }
-
     if (hand[0].value === "A") {
         actionList.push("INSURANCE");
     }
-    //Sent Action to user
+    var message = {
+        "action": "DISPLAY_ACTIONS",
+        "playerNo": playerInProcess,
+        "avatarID": persons[players[playerInProcess].person].avatarID,
+        "actionsList": actionList
+    };
+    Messages.sendMessage(channelComm, JSON.stringify(message));
+    players[playerInProcess].isFirstAction = false;
 }
 
 function isThisABlackJack(handArray) {
@@ -362,26 +508,73 @@ function getCardValue(strValue) {
     return value;
 }
 
-/* 
-var message = {
-    "action": "I_DIED",
-    "avatarID": avatarID       
-};
-Messages.sendMessage(channelComm, JSON.stringify(message));
- */
-
-
 function myTimer(deltaTime) {
+    var message, i;
     var today = new Date();
     if ((today.getTime() - processTimer) > PROCESS_INTERVAL ) {
         
         switch(gameflowState) {
             case "BETTING":
-                for (var i = 1; i < players.length; i++) {
-                    if (players[i].state === "JOINED") {
-                        //send cash display update
-                        //send betting action
-                        players[i].state === "PLAYING";
+                if (countDown === -1) {
+                    for (i = 1; i < players.length; i++) {
+                        if (players[i].state === "JOINED") {
+                            message = {
+                                "action": "DISPLAY_PLAYER_MONEY",
+                                "playerNo": i,
+                                "amount": persons[players[i].person].cash,
+                                "avatarID": persons[players[i].person].avatarID
+                            };
+                            Messages.sendMessage(channelComm, JSON.stringify(message));                            
+
+                            message = {
+                                "action": "DISPLAY_ACTIONS",
+                                "playerNo": i,
+                                "avatarID": persons[players[i].person].avatarID,
+                                "actionsList": []
+                            };
+                            Messages.sendMessage(channelComm, JSON.stringify(message));
+                            
+                            countDown = 30;
+                            players[i].state === "PLAYING";
+                        }
+                    }
+                } else {
+                    countDown = countDown -1;
+                    if (countDown === 0) {
+                        var atLeastOnePlayerPlaying = false;
+                        for (i = 1; i < players.length; i++) {
+                            if (players[i].bet === 0) {
+                                players[i].state = "JOINED";
+                            } else {
+                                updateCash(i ,false);
+                                atLeastOnePlayerPlaying = true;
+                            }
+                        }
+                        if (atLeastOnePlayerPlaying) {
+                            cardsDistribution();
+                            gameflowState = "ACTIONS";
+                            countDown = 30;
+                            playerInProcess = 1;
+                            players[playerInProcess].isFirstAction = true;
+                            sendActions();
+                        }
+                    }
+                }
+                break;
+            case "ACTIONS"
+                countDown = countDown -1;
+                if (countDown === 0) {
+                    message = {
+                        "action": "CLEAR_ACTIONS",
+                        "avatarID": data.avatarID
+                    };
+                    Messages.sendMessage(channelComm, JSON.stringify(message));            
+                    playerInProcess = playerInProcess + 1;
+                    if (playerInProcess === 5) {
+                        dealerTurn();
+                    } else {
+                        countDown = 30;
+                        sendActions();  
                     }
                 }
                 break;
@@ -396,7 +589,6 @@ Messages.subscribe(channelComm);
 Messages.messageReceived.connect(onMessageReceived);
 
 shuffleCards();
-print("BLACKJACK: " + JSON.stringify(cards)); //###########################################################################DEBUG
 
 Script.scriptEnding.connect(function () {
 

@@ -28,7 +28,7 @@
             Messages.sendMessage(channelComm, JSON.stringify(message));
             
             var injectorOptions = {
-                "position": MyAvatar.position,
+                "position": Entities.getEntityProperties(entityID,["position"]).position,
                 "volume": 0.25,
                 "loop": false,
                 "localOnly": true
