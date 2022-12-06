@@ -289,9 +289,11 @@ function onMessageReceived(channel, message, sender, localOnly) {
 function getPlayerNoFromAvatarID(avatarID) {
     var playerNo = 0;
     for (var i = 1; i < players.length; i++) {
-        if (persons[players[i].person].avatarID === avatarID) {
-            playerNo = i;
-            break;
+        if (players[i].person !== -1) { 
+            if (persons[players[i].person].avatarID === avatarID) {
+                playerNo = i;
+                break;
+            }
         }
     }
     return playerNo;    
