@@ -1,0 +1,327 @@
+{
+  "DataVersion": 0,
+  "Entities": [
+    {
+    "id": "{60711992-3ca4-450b-8cf1-5605ea28aab8}",
+    "type": "Box",
+    "lastEdited": 1670218260489691,
+    "parentID": "{8407f16f-ce6a-46ba-8d07-fd8512c73070}",
+    "visible": false,
+    "name": "Black Jack - Seat Player 1",
+    "locked": true,
+    "userData": "{\"canClickOnModelToSit\":false}",
+    "description": "1",
+    "position": {
+        "x": 1.1736969947814941,
+        "y": 0.8658562302589417,
+        "z": -0.8479341864585876
+    },
+    "dimensions": {
+        "x": 0.3499999940395355,
+        "y": 0.004999999888241291,
+        "z": 0.3499999940395355
+    },
+    "rotation": {
+        "x": 0.0000762939453125,
+        "y": 0.8909590244293213,
+        "z": -0.0000457763671875,
+        "w": 0.45403218269348145
+    },
+    "created": 1669691621769216,
+    "lastEditedBy": "{f4525b7b-1da7-4a1f-ab1d-15c3d50ef2d0}",
+    "queryAACube": {
+        "x": 0.29734593629837036,
+        "y": -0.03725147247314453,
+        "z": -9.082711219787598,
+        "scale": 1.3377692699432373
+    },
+    "grab": {
+        "grabbable": false,
+        "equippableLeftRotation": {
+            "x": -0.0000152587890625,
+            "y": -0.0000152587890625,
+            "z": -0.0000152587890625,
+            "w": 1
+        },
+        "equippableRightRotation": {
+            "x": -0.0000152587890625,
+            "y": -0.0000152587890625,
+            "z": -0.0000152587890625,
+            "w": 1
+        }
+    },
+    "damping": 0,
+    "angularDamping": 0,
+    "script": "https://aleziakurdis.github.io/blackJack/sit/sitClient.js",
+    "scriptTimestamp": 1670185484288,
+    "serverScripts": "https://aleziakurdis.github.io/blackJack/sit/sitServer.js",
+    "color": {
+        "red": 0,
+        "green": 180,
+        "blue": 239
+    },
+    "shape": "Cube",
+    "clientOnly": false,
+    "avatarEntity": false,
+    "localEntity": false,
+    "faceCamera": false,
+    "isFacingAvatar": false
+},
+    {
+    "id": "{8407f16f-ce6a-46ba-8d07-fd8512c73070}",
+    "type": "Model",
+    "lastEdited": 1670218313602252,
+    "name": "Black Jack Table",
+    "dimensions": {
+        "x": 2.1993727684020996,
+        "y": 1.0711601972579956,
+        "z": 1.1522765159606934
+    },
+    "rotation": {
+        "x": -0.0000152587890625,
+        "y": -0.0000152587890625,
+        "z": -0.0000152587890625,
+        "w": 1
+    },
+    "created": 1669864628420608,
+    "lastEditedBy": "{f4525b7b-1da7-4a1f-ab1d-15c3d50ef2d0}",
+    "queryAACube": {
+        "x": -1.35206937789917,
+        "y": -1.35206937789917,
+        "z": -1.35206937789917,
+        "scale": 2.70413875579834
+    },
+    "grab": {
+        "grabbable": false,
+        "equippableLeftRotation": {
+            "x": -0.0000152587890625,
+            "y": -0.0000152587890625,
+            "z": -0.0000152587890625,
+            "w": 1
+        },
+        "equippableRightRotation": {
+            "x": -0.0000152587890625,
+            "y": -0.0000152587890625,
+            "z": -0.0000152587890625,
+            "w": 1
+        }
+    },
+    "damping": 0,
+    "angularDamping": 0,
+    "script": "https://aleziakurdis.github.io/blackJack/displayer.js",
+    "scriptTimestamp": 1670185222144,
+    "shapeType": "static-mesh",
+    "modelURL": "https://aleziakurdis.github.io/blackJack/table/blackJackTable.fst",
+    "blendshapeCoefficients": "{\n}\n",
+    "useOriginalPivot": true,
+    "animation": {
+        "allowTranslation": false
+    },
+    "clientOnly": false,
+    "avatarEntity": false,
+    "localEntity": false,
+    "faceCamera": false,
+    "isFacingAvatar": false
+},
+    {
+    "id": "{6be027ec-d562-464f-8dc1-bd7d6d3c7e0e}",
+    "type": "Box",
+    "lastEdited": 1670218258071273,
+    "parentID": "{8407f16f-ce6a-46ba-8d07-fd8512c73070}",
+    "visible": false,
+    "name": "Black Jack - Seat Player 2",
+    "locked": true,
+    "userData": "{\"canClickOnModelToSit\":false}",
+    "description": "2",
+    "position": {
+        "x": 0.48937833309173584,
+        "y": 0.8595938086509705,
+        "z": -1.3659827709197998
+    },
+    "dimensions": {
+        "x": 0.3499999940395355,
+        "y": 0.004999999888241291,
+        "z": 0.3499999940395355
+    },
+    "rotation": {
+        "x": -0.0001373291015625,
+        "y": 0.9876706600189209,
+        "z": -0.0000762939453125,
+        "w": 0.15648126602172852
+    },
+    "created": 1669694037688320,
+    "lastEditedBy": "{f4525b7b-1da7-4a1f-ab1d-15c3d50ef2d0}",
+    "queryAACube": {
+        "x": -0.366098552942276,
+        "y": -0.0435107946395874,
+        "z": -9.585662841796875,
+        "scale": 1.3377695083618164
+    },
+    "grab": {
+        "grabbable": false,
+        "equippableLeftRotation": {
+            "x": -0.0000152587890625,
+            "y": -0.0000152587890625,
+            "z": -0.0000152587890625,
+            "w": 1
+        },
+        "equippableRightRotation": {
+            "x": -0.0000152587890625,
+            "y": -0.0000152587890625,
+            "z": -0.0000152587890625,
+            "w": 1
+        }
+    },
+    "damping": 0,
+    "angularDamping": 0,
+    "script": "https://aleziakurdis.github.io/blackJack/sit/sitClient.js",
+    "scriptTimestamp": 1669694357504,
+    "serverScripts": "https://aleziakurdis.github.io/blackJack/sit/sitServer.js",
+    "color": {
+        "red": 0,
+        "green": 180,
+        "blue": 239
+    },
+    "shape": "Cube",
+    "clientOnly": false,
+    "avatarEntity": false,
+    "localEntity": false,
+    "faceCamera": false,
+    "isFacingAvatar": false
+},
+    {
+    "id": "{0b6ab48c-356a-44ce-8ffb-af227615f295}",
+    "type": "Box",
+    "lastEdited": 1670218255870437,
+    "parentID": "{8407f16f-ce6a-46ba-8d07-fd8512c73070}",
+    "visible": false,
+    "name": "Black Jack - Seat Player 3",
+    "locked": true,
+    "userData": "{\"canClickOnModelToSit\":false}",
+    "description": "3",
+    "position": {
+        "x": -0.41675758361816406,
+        "y": 0.868740975856781,
+        "z": -1.3507170677185059
+    },
+    "dimensions": {
+        "x": 0.3499999940395355,
+        "y": 0.004999999888241291,
+        "z": 0.3499999940395355
+    },
+    "rotation": {
+        "x": 0.0000762939453125,
+        "y": 0.9875485897064209,
+        "z": -0.0000152587890625,
+        "w": -0.15730524063110352
+    },
+    "created": 1669694037688320,
+    "lastEditedBy": "{f4525b7b-1da7-4a1f-ab1d-15c3d50ef2d0}",
+    "queryAACube": {
+        "x": -1.2466909885406494,
+        "y": -0.034340500831604004,
+        "z": -9.570490837097168,
+        "scale": 1.3377695083618164
+    },
+    "grab": {
+        "grabbable": false,
+        "equippableLeftRotation": {
+            "x": -0.0000152587890625,
+            "y": -0.0000152587890625,
+            "z": -0.0000152587890625,
+            "w": 1
+        },
+        "equippableRightRotation": {
+            "x": -0.0000152587890625,
+            "y": -0.0000152587890625,
+            "z": -0.0000152587890625,
+            "w": 1
+        }
+    },
+    "damping": 0,
+    "angularDamping": 0,
+    "script": "https://aleziakurdis.github.io/blackJack/sit/sitClient.js",
+    "scriptTimestamp": 1669694357504,
+    "serverScripts": "https://aleziakurdis.github.io/blackJack/sit/sitServer.js",
+    "color": {
+        "red": 0,
+        "green": 180,
+        "blue": 239
+    },
+    "shape": "Cube",
+    "clientOnly": false,
+    "avatarEntity": false,
+    "localEntity": false,
+    "faceCamera": false,
+    "isFacingAvatar": false
+},
+    {
+    "id": "{715e5877-3278-494e-a946-e765437b57af}",
+    "type": "Box",
+    "lastEdited": 1670218263153482,
+    "parentID": "{8407f16f-ce6a-46ba-8d07-fd8512c73070}",
+    "visible": false,
+    "name": "Black Jack - Seat Player 4",
+    "locked": true,
+    "userData": "{\"canClickOnModelToSit\":false}",
+    "description": "4",
+    "position": {
+        "x": -1.1562589406967163,
+        "y": 0.8620408177375793,
+        "z": -0.8372220993041992
+    },
+    "dimensions": {
+        "x": 0.3499999940395355,
+        "y": 0.004999999888241291,
+        "z": 0.3499999940395355
+    },
+    "rotation": {
+        "x": 0.0000152587890625,
+        "y": 0.8903486728668213,
+        "z": -0.0000457763671875,
+        "w": -0.4552224278450012
+    },
+    "created": 1669694037688320,
+    "lastEditedBy": "{f4525b7b-1da7-4a1f-ab1d-15c3d50ef2d0}",
+    "queryAACube": {
+        "x": -1.9654347896575928,
+        "y": -0.04100102186203003,
+        "z": -9.072126388549805,
+        "scale": 1.3377692699432373
+    },
+    "grab": {
+        "grabbable": false,
+        "equippableLeftRotation": {
+            "x": -0.0000152587890625,
+            "y": -0.0000152587890625,
+            "z": -0.0000152587890625,
+            "w": 1
+        },
+        "equippableRightRotation": {
+            "x": -0.0000152587890625,
+            "y": -0.0000152587890625,
+            "z": -0.0000152587890625,
+            "w": 1
+        }
+    },
+    "damping": 0,
+    "angularDamping": 0,
+    "script": "https://aleziakurdis.github.io/blackJack/sit/sitClient.js",
+    "scriptTimestamp": 1669694357504,
+    "serverScripts": "https://aleziakurdis.github.io/blackJack/sit/sitServer.js",
+    "color": {
+        "red": 0,
+        "green": 180,
+        "blue": 239
+    },
+    "shape": "Cube",
+    "clientOnly": false,
+    "avatarEntity": false,
+    "localEntity": false,
+    "faceCamera": false,
+    "isFacingAvatar": false
+}
+    ],
+  "Id": "{863c9e27-375c-4c39-a93b-f84561181a45}",
+  "Version": 133
+}
