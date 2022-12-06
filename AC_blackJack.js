@@ -314,13 +314,13 @@ function cardsDistribution() {
             players[i].hand = [];
             players[i].hand.push(drawAcard());
             players[i].hand.push(drawAcard());
-        }
-        message = {
-            "action": "DISPLAY_CARDS",
-            "playerNo": i,
-            "hand": players[i].hand
-        };
-        Messages.sendMessage(channelComm, JSON.stringify(message));        
+            message = {
+                "action": "DISPLAY_CARDS",
+                "playerNo": i,
+                "hand": players[i].hand
+            };
+            Messages.sendMessage(channelComm, JSON.stringify(message));
+        }        
     }
     hand = [];
     hand.push(drawAcard());
@@ -346,12 +346,15 @@ function dealerTurn() {
     Messages.sendMessage(channelComm, JSON.stringify(message));
     var dealerScore = checkCount(hand);
     var playerScore = 0;
+    var hasPaid;
     for (vari = 1; i < players.length; i++) {
         if (players[i].state === "PLAYING") {
+            hasPaid = false;
             if (players[i].hand.length === 0) {
                 //surrendered (lose half bet)
                 persons[players[i].person].cash = persons[players[i].person].cash + Math.floor(players[i].bet/2);
-                players[i].bet = 0;                
+                players[i].bet = 0;
+                hasPaid = true;
             } else {
                 playerScore = checkCount(players[i].hand);
                 if (playerScore > 21) {
@@ -359,6 +362,7 @@ function dealerTurn() {
                         //paid insurance garantie 2 time the bet
                         persons[players[i].person].cash = persons[players[i].person].cash + (players[i].bet * 2);
                         players[i].bet = 0;
+                        hasPaid = true;
                     } else {
                         //loose full bet
                         players[i].bet = 0;
@@ -368,30 +372,35 @@ function dealerTurn() {
                         if (isThisABlackJack(players[i].hand)) {
                             //win 1.5 X bet + keep the bet
                             persons[players[i].person].cash = persons[players[i].person].cash + players[i].bet + (players[i].bet * 1.5);
-                            players[i].bet = 0;  
+                            players[i].bet = 0;
+                            hasPaid = true;
                         } else {
                             //win 1 X bet + keep the bet
                             persons[players[i].person].cash = persons[players[i].person].cash + (players[i].bet * 2);
-                            players[i].bet = 0;                            
+                            players[i].bet = 0;
+                            hasPaid = true;                            
                         }
                     } else if (playerScore === dealerScore) {
                         //safe: keep your bet
                         persons[players[i].person].cash = persons[players[i].person].cash + players[i].bet;
-                        players[i].bet = 0;                          
+                        players[i].bet = 0;
+                        hasPaid = true;                        
                     } else {
                         //loose
                         players[i].bet = 0;
                     }
                 }
             }
-        }
-        message = {
-            "action": "SOUND_COINS"
-        };
-        Messages.sendMessage(channelComm, JSON.stringify(message));        
-        players[i].insurance = false;
-        updateCash(playerNo, false); 
-        players[i].state === "JOINED";    
+            if (hasPaid) {
+                message = {
+                    "action": "SOUND_COINS"
+                };
+                Messages.sendMessage(channelComm, JSON.stringify(message));
+            }
+            players[i].insurance = false;
+            updateCash(playerNo, false); 
+            players[i].state === "JOINED";
+        }    
     }
     //Cleanup the board.
     message = {
@@ -412,24 +421,34 @@ function drawAcard() {
 }
 
 function sendActions() {
-    var actionList = ["STAND"];
-    if (!isThisABlackJack(players[playerInProcess].hand)) {
-        actionList.push("HIT");
-        if (players[playerInProcess].isFirstAction) {
-            actionList.push("SURRENDER");
+    if (players[playerInProcess].state === "PLAYING") {
+        var actionList = ["STAND"];
+        if (!isThisABlackJack(players[playerInProcess].hand)) {
+            actionList.push("HIT");
+            if (players[playerInProcess].isFirstAction) {
+                actionList.push("SURRENDER");
+            }
+        }
+        if (hand[0].value === "A") {
+            actionList.push("INSURANCE");
+        }
+        var message = {
+            "action": "DISPLAY_ACTIONS",
+            "playerNo": playerInProcess,
+            "avatarID": persons[players[playerInProcess].person].avatarID,
+            "actionsList": actionList
+        };
+        Messages.sendMessage(channelComm, JSON.stringify(message));
+        players[playerInProcess].isFirstAction = false;
+    } else {
+        playerInProcess = playerInProcess + 1;
+        if (playerInProcess === 5) {
+            dealerTurn();
+        } else {
+            countDown = 30;
+            sendActions();  
         }
     }
-    if (hand[0].value === "A") {
-        actionList.push("INSURANCE");
-    }
-    var message = {
-        "action": "DISPLAY_ACTIONS",
-        "playerNo": playerInProcess,
-        "avatarID": persons[players[playerInProcess].person].avatarID,
-        "actionsList": actionList
-    };
-    Messages.sendMessage(channelComm, JSON.stringify(message));
-    players[playerInProcess].isFirstAction = false;
 }
 
 function isThisABlackJack(handArray) {
@@ -543,11 +562,13 @@ function myTimer(deltaTime) {
                     if (countDown === 0) {
                         var atLeastOnePlayerPlaying = false;
                         for (i = 1; i < players.length; i++) {
-                            if (players[i].bet === 0) {
-                                players[i].state = "JOINED";
-                            } else {
-                                updateCash(i ,false);
-                                atLeastOnePlayerPlaying = true;
+                            if (players[i].state === "PLAYING") {
+                                if (players[i].bet === 0) {
+                                    players[i].state = "JOINED";
+                                } else {
+                                    updateCash(i ,false);
+                                    atLeastOnePlayerPlaying = true;
+                                }
                             }
                         }
                         if (atLeastOnePlayerPlaying) {
