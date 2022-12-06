@@ -165,7 +165,27 @@ function onMessageReceived(channel, message, sender, localOnly) {
             playerSit(playerNo, data.avatarID);
         } else if  (data.action === "PLAYER_LEAVE") {
             playerNo = parseInt(data.playerNo, 10);
-            players[playerNo] = {"person": -1, "state": "OUT", "bet": 0};
+            messageToSend = {
+                "action": "CLEAR_ACTIONS",
+                "avatarID": persons[players[playerNo].person].avatarID
+            };
+            Messages.sendMessage(channelComm, JSON.stringify(messageToSend));
+            messageToSend = {
+                "action": "CLEAR_PLAYER_MONEY",
+                "playerNo": playerNo
+            };
+            Messages.sendMessage(channelComm, JSON.stringify(messageToSend));
+            messageToSend = {
+                "action": "CLEAR_PLAYER_BET",
+                "playerNo": playerNo
+            };
+            Messages.sendMessage(channelComm, JSON.stringify(messageToSend));
+            messageToSend = {
+                "action": "CLEAR_PLAYER_INSURANCE",
+                "playerNo": playerNo
+            };
+            Messages.sendMessage(channelComm, JSON.stringify(messageToSend));             
+            players[playerNo] = {"person": -1, "state": "OUT", "bet": 0};            
             if (isAllPlayerOff()) {
                 Script.update.disconnect(myTimer);
                 gameflowState = "OFF";
@@ -268,7 +288,7 @@ function onMessageReceived(channel, message, sender, localOnly) {
 
 function getPlayerNoFromAvatarID(avatarID) {
     var playerNo = 0;
-    for (var i = 1; i > players.length; i++) {
+    for (var i = 1; i < players.length; i++) {
         if (persons[players[i].person].avatarID === avatarID) {
             playerNo = i;
             break;
