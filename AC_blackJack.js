@@ -147,7 +147,7 @@ var shuffle = function(array) {
 
 function isAllPlayerOff() {
     var allOff = true;
-    for (var i = 1; i > players.length; i++) {
+    for (var i = 1; i < players.length; i++) {
         if (players[i].state !== "OUT") {
             allOff = false;
             break;
@@ -330,7 +330,7 @@ function updateCash(playerNo, isInteractive) {
 var hand = [];
 function cardsDistribution() {
     var message;
-    for (var i = 1; i > players.length; i++) {
+    for (var i = 1; i < players.length; i++) {
         if (players[i].state === "PLAYING") {
             players[i].insurance = false;
             players[i].hand = [];
