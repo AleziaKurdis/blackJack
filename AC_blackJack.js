@@ -443,7 +443,7 @@ function drawAcard() {
     if (cardDrawing === cards.length) {
         shuffleCards();
     }
-    return drawn;
+    return drawn[0];
 }
 
 function sendActions() {
