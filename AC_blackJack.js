@@ -579,7 +579,7 @@ function myTimer(deltaTime) {
                             Messages.sendMessage(channelComm, JSON.stringify(message));
                             
                             countDown = 30;
-                            players[i].state === "PLAYING";
+                            players[i].state = "PLAYING";
                         }
                     }
                 } else {
