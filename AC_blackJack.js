@@ -598,8 +598,8 @@ function myTimer(deltaTime) {
                         }
                         if (atLeastOnePlayerPlaying) {
                             cardsDistribution();
-                            gameflowState = "ACTIONS";
                             countDown = 30;
+                            gameflowState = "ACTIONS";
                             playerInProcess = 1;
                             players[playerInProcess].isFirstAction = true;
                             sendActions();
