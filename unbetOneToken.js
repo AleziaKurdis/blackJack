@@ -11,7 +11,7 @@
 //  See the accompanying file LICENSE or http://www.apache.org/licenses/LICENSE-2.0.html
 //
 (function(){
-    var jsMainFileName = "betOneToken.js";
+    var jsMainFileName = "unbetOneToken.js";
     var ROOT = Script.resolvePath('').split(jsMainFileName)[0];    
     var channelComm = "ak.blackJack.ac.communication"; 
     var oneTimeOnly = false;
