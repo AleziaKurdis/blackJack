@@ -337,6 +337,7 @@ function cardsDistribution() {
         if (players[i].state === "PLAYING") {
             players[i].insurance = false;
             players[i].hand = [];
+            print("BLACKJACK drawAcard = " + JSON.stringify(drawAcard())); //############################################################################ TO REMOVE
             players[i].hand.push(drawAcard());
             players[i].hand.push(drawAcard());
             message = {
@@ -587,7 +588,6 @@ function myTimer(deltaTime) {
                     if (countDown === 0) {
                         var atLeastOnePlayerPlaying = false;
                         for (i = 1; i < players.length; i++) {
-                            print("BLACKJACK playerno: " + i + " - State: " + players[i].state + " -  BET: " + players[i].bet); //#################################################### TO REMOVE
                             if (players[i].state === "PLAYING") {
                                 if (players[i].bet === 0) {
                                     players[i].state = "JOINED";
