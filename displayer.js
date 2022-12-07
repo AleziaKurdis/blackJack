@@ -423,7 +423,7 @@
             },
             "modelURL": ROOT +  "tokens/token.fbx",
             "script": actionScript,
-            "description": "" + (10^exponent),
+            "description": "" + Math.pow(10, exponent),
             "useOriginalPivot": true,
             "type": "Model"
         },"local");
