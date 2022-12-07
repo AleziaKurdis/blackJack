@@ -337,7 +337,6 @@ function cardsDistribution() {
         if (players[i].state === "PLAYING") {
             players[i].insurance = false;
             players[i].hand = [];
-            print("BLACKJACK drawAcard = " + JSON.stringify(drawAcard())); //############################################################################ TO REMOVE
             players[i].hand.push(drawAcard());
             players[i].hand.push(drawAcard());
             message = {
@@ -373,7 +372,7 @@ function dealerTurn() {
     var dealerScore = checkCount(hand);
     var playerScore = 0;
     var hasPaid;
-    for (vari = 1; i < players.length; i++) {
+    for (var i = 1; i < players.length; i++) {
         if (players[i].state === "PLAYING") {
             hasPaid = false;
             if (players[i].hand.length === 0) {
