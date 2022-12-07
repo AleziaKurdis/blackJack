@@ -157,6 +157,9 @@ function isAllPlayerOff() {
 }
 
 function onMessageReceived(channel, message, sender, localOnly) {
+    print("BLACKJACK MESSAGE: ##################### BEGINNING #####################"); //######################################## TO REMOVE
+    print("BLACKJACK MESSAGE: " + message); //################################################################################### TO REMOVE
+    print("BLACKJACK MESSAGE: #####################   END     #####################"); //######################################## TO REMOVE
     var playerNo, messageToSend;
     if (channel === channelComm) {
         var data = JSON.parse(message);
@@ -196,8 +199,6 @@ function onMessageReceived(channel, message, sender, localOnly) {
             if (data.amount === 1 & players[playerNo].bet === 0) {
                 bet = 2;
             }
-            print("BLACKJACK PlayerNo " + playerNo); //############################################################### DEBUG
-            print("BLACKJACK players[playerNo].person " + players[playerNo].person); //############################################################### DEBUG
             players[playerNo].bet = players[playerNo].bet + bet;
             persons[players[playerNo].person].cash = persons[players[playerNo].person].cash - bet;
             updateCash(playerNo, true);
