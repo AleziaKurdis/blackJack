@@ -373,6 +373,7 @@ function dealerTurn() {
     var playerScore = 0;
     var hasPaid;
     for (var i = 1; i < players.length; i++) {
+        hasPaid = false;
         if (players[i].state === "PLAYING") {
             hasPaid = false;
             if (players[i].hand.length === 0) {
