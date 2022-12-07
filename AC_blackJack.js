@@ -588,6 +588,7 @@ function myTimer(deltaTime) {
                         var atLeastOnePlayerPlaying = false;
                         for (i = 1; i < players.length; i++) {
                             if (players[i].state === "PLAYING") {
+                                print("BLACKJACK playerno: " + i + " BET: " + players[i].bet); //#################################################### TO REMOVE
                                 if (players[i].bet === 0) {
                                     players[i].state = "JOINED";
                                 } else {
