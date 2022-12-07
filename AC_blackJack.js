@@ -603,6 +603,14 @@ function myTimer(deltaTime) {
                             playerInProcess = 1;
                             players[playerInProcess].isFirstAction = true;
                             sendActions();
+                        } else {
+                            if (isAllPlayerOff()) {
+                                Script.update.disconnect(myTimer);
+                                gameflowState = "OFF";
+                            } else {
+                                gameflowState = "BETTING";
+                                countDown = -1;                                
+                            }
                         }
                     }
                 }
@@ -612,7 +620,7 @@ function myTimer(deltaTime) {
                 if (countDown === 0) {
                     message = {
                         "action": "CLEAR_ACTIONS",
-                        "avatarID": data.avatarID
+                        "avatarID": persons[players[playerInProcess].person].avatarID
                     };
                     Messages.sendMessage(channelComm, JSON.stringify(message));            
                     playerInProcess = playerInProcess + 1;
