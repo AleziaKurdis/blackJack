@@ -323,6 +323,12 @@ function updateCash(playerNo, isInteractive) {
             "avatarID": ""
         };
         Messages.sendMessage(channelComm, JSON.stringify(message));        
+    } else {
+        message = {
+            "action": "CLEAR_PLAYER_INSURANCE",
+            "playerNo": playerNo
+        };
+        Messages.sendMessage(channelComm, JSON.stringify(message));          
     }
 }
 
