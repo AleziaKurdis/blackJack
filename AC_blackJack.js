@@ -353,7 +353,7 @@ function cardsDistribution() {
     Messages.sendMessage(channelComm, JSON.stringify(message));     
 }
 
-function dealerTurn() {
+function dealerPlayCards() {
     hand.push(drawAcard());
     var message = {
         "action": "SOUND_FLIP"
@@ -366,7 +366,15 @@ function dealerTurn() {
     };
     Messages.sendMessage(channelComm, JSON.stringify(message));
     var dealerScore = checkCount(hand);
-    //MANQUE DRAW UP 17
+    if (dealerScore < 17) {
+        dealerPlayCards();
+    }
+}
+
+function dealerTurn() {
+    var message;
+    dealerPlayCards();
+    var dealerScore = checkCount(hand);
     var playerScore = 0;
     var hasPaid;
     for (var i = 1; i < players.length; i++) {
@@ -429,7 +437,8 @@ function dealerTurn() {
     message = {
         "action": "CLEAR_ALL_CARDS"
     };
-    Messages.sendMessage(channelComm, JSON.stringify(message));    
+    Messages.sendMessage(channelComm, JSON.stringify(message));
+    countDown = -1;
     gameflowState = "BETTING";
     playerInProcess = 1;
 }
