@@ -341,6 +341,10 @@ function cardsDistribution() {
                 "hand": players[i].hand
             };
             Messages.sendMessage(channelComm, JSON.stringify(message));
+            message = {
+                "action": "SOUND_FLIP"
+            };
+            Messages.sendMessage(channelComm, JSON.stringify(message));            
         }        
     }
     hand = [];
@@ -349,6 +353,10 @@ function cardsDistribution() {
         "action": "DISPLAY_CARDS",
         "playerNo": 0,
         "hand": hand
+    };
+    Messages.sendMessage(channelComm, JSON.stringify(message));
+    message = {
+        "action": "SOUND_FLIP"
     };
     Messages.sendMessage(channelComm, JSON.stringify(message));     
 }
@@ -366,6 +374,7 @@ function dealerPlayCards() {
     };
     Messages.sendMessage(channelComm, JSON.stringify(message));
     var dealerScore = checkCount(hand);
+    print("BLACKJACK Dealer Count: " + dealerScore); //############################################################ TO REMOVE
     if (dealerScore < 17) {
         dealerPlayCards();
     }
