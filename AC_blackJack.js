@@ -380,7 +380,6 @@ function dealerPlayCards() {
     };
     Messages.sendMessage(channelComm, JSON.stringify(message));
     var dealerScore = checkCount(hand);
-    print("BLACKJACK Dealer Count: " + dealerScore); //############################################################ TO REMOVE
     if (dealerScore < 17) {
         dealerPlayCards();
     }
