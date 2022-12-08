@@ -387,75 +387,69 @@ function dealerPlayCards() {
 }
 
 function dealerTurn() {
-    var message;
     dealerPlayCards();
+    countDown = -1;
+    gameflowState = "PAYING";   
+}
+
+function payingOnePlayer() {  
+    var message;
     var dealerScore = checkCount(hand);
     var playerScore = 0;
-    var hasPaid;
-    for (var i = 1; i < players.length; i++) {
+    var hasPaid = false;
+    if (players[playerInProcess].state === "PLAYING") {
         hasPaid = false;
-        if (players[i].state === "PLAYING") {
-            hasPaid = false;
-            if (players[i].hand.length === 0) {
-                //surrendered (lose half bet)
-                persons[players[i].person].cash = persons[players[i].person].cash + Math.floor(players[i].bet/2);
-                players[i].bet = 0;
-                hasPaid = true;
+        if (players[playerInProcess].hand.length === 0) {
+            //surrendered (lose half bet)
+            persons[players[playerInProcess].person].cash = persons[players[playerInProcess].person].cash + Math.floor(players[playerInProcess].bet/2);
+            players[playerInProcess].bet = 0;
+            hasPaid = true;
+        } else {
+            playerScore = checkCount(players[playerInProcess].hand);
+            if (playerScore > 21) {
+                if (isThisABlackJack(hand) &&  players[playerInProcess].insurance) {
+                    //paid insurance garantie 2 time the bet
+                    persons[players[playerInProcess].person].cash = persons[players[playerInProcess].person].cash + (players[playerInProcess].bet * 2);
+                    players[playerInProcess].bet = 0;
+                    hasPaid = true;
+                } else {
+                    //loose full bet
+                    players[playerInProcess].bet = 0;
+                }
             } else {
-                playerScore = checkCount(players[i].hand);
-                if (playerScore > 21) {
-                    if (isThisABlackJack(hand) &&  players[i].insurance) {
-                        //paid insurance garantie 2 time the bet
-                        persons[players[i].person].cash = persons[players[i].person].cash + (players[i].bet * 2);
-                        players[i].bet = 0;
+                if (playerScore > dealerScore) {
+                    if (isThisABlackJack(players[playerInProcess].hand)) {
+                        //win 1.5 X bet + keep the bet
+                        persons[players[playerInProcess].person].cash = persons[players[playerInProcess].person].cash + players[playerInProcess].bet + (players[playerInProcess].bet * 1.5);
+                        players[playerInProcess].bet = 0;
                         hasPaid = true;
                     } else {
-                        //loose full bet
-                        players[i].bet = 0;
+                        //win 1 X bet + keep the bet
+                        persons[players[playerInProcess].person].cash = persons[players[playerInProcess].person].cash + (players[playerInProcess].bet * 2);
+                        players[playerInProcess].bet = 0;
+                        hasPaid = true;                            
                     }
+                } else if (playerScore === dealerScore) {
+                    //safe: keep your bet
+                    persons[players[playerInProcess].person].cash = persons[players[playerInProcess].person].cash + players[playerInProcess].bet;
+                    players[playerInProcess].bet = 0;
+                    hasPaid = true;                        
                 } else {
-                    if (playerScore > dealerScore) {
-                        if (isThisABlackJack(players[i].hand)) {
-                            //win 1.5 X bet + keep the bet
-                            persons[players[i].person].cash = persons[players[i].person].cash + players[i].bet + (players[i].bet * 1.5);
-                            players[i].bet = 0;
-                            hasPaid = true;
-                        } else {
-                            //win 1 X bet + keep the bet
-                            persons[players[i].person].cash = persons[players[i].person].cash + (players[i].bet * 2);
-                            players[i].bet = 0;
-                            hasPaid = true;                            
-                        }
-                    } else if (playerScore === dealerScore) {
-                        //safe: keep your bet
-                        persons[players[i].person].cash = persons[players[i].person].cash + players[i].bet;
-                        players[i].bet = 0;
-                        hasPaid = true;                        
-                    } else {
-                        //loose
-                        players[i].bet = 0;
-                    }
+                    //loose
+                    players[playerInProcess].bet = 0;
                 }
             }
-            if (hasPaid) {
-                message = {
-                    "action": "SOUND_COINS"
-                };
-                Messages.sendMessage(channelComm, JSON.stringify(message));
-            }
-            players[i].insurance = false;
-            updateCash(i, false); 
-            players[i].state = "JOINED";
-        }    
+        }
+        if (hasPaid) {
+            message = {
+                "action": "SOUND_COINS"
+            };
+            Messages.sendMessage(channelComm, JSON.stringify(message));
+        }
+        players[playerInProcess].insurance = false;
+        updateCash(playerInProcess, false); 
+        players[playerInProcess].state = "JOINED";
     }
-    //Cleanup the board.
-    message = {
-        "action": "CLEAR_ALL_CARDS"
-    };
-    //Messages.sendMessage(channelComm, JSON.stringify(message));
-    countDown = -1;
-    gameflowState = "BETTING";
-    playerInProcess = 1;
 }
 
 function drawAcard() {
@@ -652,6 +646,35 @@ function myTimer(deltaTime) {
                         countDown = 30;
                         sendActions();  
                     }
+                }
+                break;
+            case "PAYING":
+                if (countDown === -1) {
+                    playerInProcess = 1;
+                    countDown = 10;
+                    payingOnePlayer();
+                } else {
+                    countDown = countDown -1;
+                    if (countDown === 0) {
+                        playerInProcess = playerInProcess + 1;
+                        if (playerInProcess === 5} {
+                            //Cleanup the board.
+                            message = {
+                                "action": "CLEAR_ALL_CARDS"
+                            };
+                            Messages.sendMessage(channelComm, JSON.stringify(message));
+                            countDown = -1;
+                            gameflowState = "BETTING";
+                            playerInProcess = 1;
+                        } else {
+                            if (players[playerInProcess].state === "PLAYING") {
+                                countDown = 10;
+                                payingOnePlayer();
+                            } else {
+                                countDown = 1;
+                            }
+                        }
+                    }   
                 }
                 break;
         }
