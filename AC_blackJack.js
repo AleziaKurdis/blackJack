@@ -653,10 +653,10 @@ function myTimer(deltaTime) {
                     countDown = 10;
                     payingOnePlayer();
                 } else {
-                    countDown = countDown -1;
+                    countDown = countDown - 1;
                     if (countDown === 0) {
                         playerInProcess = playerInProcess + 1;
-                        if (playerInProcess === 5} {
+                        if (playerInProcess === 5) {
                             //Cleanup the board.
                             message = {
                                 "action": "CLEAR_ALL_CARDS"
