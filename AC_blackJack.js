@@ -431,9 +431,6 @@ function dealerTurn() {
                     }
                 }
             }
-            Script.setTimeout(function () {
-                //Just wait 5 sec to breath
-            }, 5000);
             if (hasPaid) {
                 message = {
                     "action": "SOUND_COINS"
@@ -449,7 +446,7 @@ function dealerTurn() {
     message = {
         "action": "CLEAR_ALL_CARDS"
     };
-    Messages.sendMessage(channelComm, JSON.stringify(message));
+    //Messages.sendMessage(channelComm, JSON.stringify(message));
     countDown = -1;
     gameflowState = "BETTING";
     playerInProcess = 1;
@@ -473,7 +470,7 @@ function sendActions() {
                 actionList.push("SURRENDER");
             }
         }
-        if (hand[0].value === "A") {
+        if (hand[0].value === "A" && persons[players[playerInProcess].person].cash > Math.floor(players[playerInProcess].bet / 2)) {
             actionList.push("INSURANCE");
         }
         var message = {
