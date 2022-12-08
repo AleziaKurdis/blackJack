@@ -650,8 +650,12 @@ function myTimer(deltaTime) {
             case "PAYING":
                 if (countDown === -1) {
                     playerInProcess = 1;
-                    countDown = 10;
-                    payingOnePlayer();
+                    if (players[playerInProcess].state === "PLAYING") {
+                        countDown = 10;
+                        payingOnePlayer();
+                    } else {
+                        countDown = 1;
+                    }                    
                 } else {
                     countDown = countDown - 1;
                     if (countDown === 0) {
