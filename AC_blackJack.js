@@ -15,7 +15,6 @@ var jsMainFileName = "AC_blackJack.js";
 var ROOT = Script.resolvePath('').split(jsMainFileName)[0];
 
 var channelComm = "ak.blackJack.ac.communication";
-//var ORIGIN_POSITION = {"x":8000,"y":8000,"z":8000}; //################################################################
 
 var PROCESS_INTERVAL = 1000; //1 sec
 var processTimer = 0;
@@ -90,7 +89,7 @@ var players = [
 ];
 
 var gameLoopOn = false;
-var gameflowState = "OFF"; //OFF - BETTING - DISTRIBUTION - ACTIONS - PLAY_AND_PAY
+var gameflowState = "OFF"; //OFF - BETTING - ACTIONS
 var playerInProcess = 0;
 
 function playerSit(playerNo, avatarID){
@@ -157,9 +156,6 @@ function isAllPlayerOff() {
 }
 
 function onMessageReceived(channel, message, sender, localOnly) {
-    print("BLACKJACK MESSAGE: ##################### BEGINNING #####################"); //######################################## TO REMOVE
-    print("BLACKJACK MESSAGE: " + message); //################################################################################### TO REMOVE
-    print("BLACKJACK MESSAGE: #####################   END     #####################"); //######################################## TO REMOVE
     var playerNo, messageToSend;
     if (channel === channelComm) {
         var data = JSON.parse(message);
@@ -370,6 +366,7 @@ function dealerTurn() {
     };
     Messages.sendMessage(channelComm, JSON.stringify(message));
     var dealerScore = checkCount(hand);
+    //MANQUE DRAW UP 17
     var playerScore = 0;
     var hasPaid;
     for (var i = 1; i < players.length; i++) {
@@ -424,7 +421,7 @@ function dealerTurn() {
                 Messages.sendMessage(channelComm, JSON.stringify(message));
             }
             players[i].insurance = false;
-            updateCash(playerNo, false); 
+            updateCash(i, false); 
             players[i].state = "JOINED";
         }    
     }
