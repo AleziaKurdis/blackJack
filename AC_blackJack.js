@@ -422,6 +422,9 @@ function dealerTurn() {
                     }
                 }
             }
+            Script.setTimeout(function () {
+                //Just wait 5 sec to breath
+            }, 5000);
             if (hasPaid) {
                 message = {
                     "action": "SOUND_COINS"
