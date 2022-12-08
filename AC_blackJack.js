@@ -425,7 +425,7 @@ function dealerTurn() {
             }
             players[i].insurance = false;
             updateCash(playerNo, false); 
-            players[i].state === "JOINED";
+            players[i].state = "JOINED";
         }    
     }
     //Cleanup the board.
