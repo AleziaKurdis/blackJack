@@ -153,7 +153,7 @@
             "lineHeight": 0.015,
             "backgroundAlpha": 0,
             "unlit": true,
-            "alignment": "right",
+            "alignment": "left",
             "topMargin": 0.01,
             "type": "Text"
         },"local");
