@@ -411,7 +411,7 @@ function payingOnePlayer() {
                     players[playerInProcess].bet = 0;
                     callDealerVerdictDisplay(playerInProcess, "PLAYER_BUSTED");
             } else {
-                if ((isThisABlackJack(players[playerInProcess].hand) && isThisABlackJack(hand)) || (playerScore === dealerScore && !isThisABlackJack(hand) && !isThisABlackJack(players[playerInProcess].hand)) {
+                if ((isThisABlackJack(players[playerInProcess].hand) && isThisABlackJack(hand)) || (playerScore === dealerScore && !isThisABlackJack(hand) && !isThisABlackJack(players[playerInProcess].hand))) {
                     //safe: keep your bet
                     persons[players[playerInProcess].person].cash = persons[players[playerInProcess].person].cash + players[playerInProcess].bet;
                     players[playerInProcess].bet = 0;
