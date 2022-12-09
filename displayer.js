@@ -21,6 +21,8 @@
     var thisRenderWithZones;
     var SOUND_FLIP, SOUND_COINS;
     
+    var dealerID = Uuid.NULL;
+    
     this.preload = function(entityID) {
         thisEntityID = entityID;
         var properties = Entities.getEntityProperties(entityID,["renderWithZones", "position"]);
@@ -28,6 +30,21 @@
 
         SOUND_FLIP = SoundCache.getSound(ROOT + "sounds/flip.wav");
         SOUND_COINS = SoundCache.getSound(ROOT + "sounds/coins.wav");
+
+        dealerID = Entities.addEntity({
+            "parentID": thisEntityID,
+            "renderWithZones": thisRenderWithZones,
+            "localPosition": {"x": 0, "y": 0, "z": 0},
+            "type": "Shape",
+            "shape": "Cube",
+            "dimensions": {"x": 0.2, "y": 0.2, "z": 0.2},
+            "name": "Dealer_Generator",
+            "visible": false,
+            "grab": {
+                "grabbable": false
+            },
+            "script": ROOT + "dealer/dealerManager.js" 
+        },"local"); 
 
         Messages.subscribe(channelComm);
         Messages.messageReceived.connect(onMessageReceived);
@@ -569,6 +586,11 @@
     this.unload = function(entityID) {
         clearPlayerActions();
         clearAllCards();
+        
+        if (dealerID !== Uuid.NULL) {
+            Entities.deleteEntity(dealerID);
+            dealerID = Uuid.NULL;
+        }
         
         for (var i = 1; i < playersMoneyIDs.length; i++) {
             clearPlayerMoney(i);
