@@ -403,40 +403,61 @@ function payingOnePlayer() {
             persons[players[playerInProcess].person].cash = persons[players[playerInProcess].person].cash + Math.floor(players[playerInProcess].bet/2);
             players[playerInProcess].bet = 0;
             hasPaid = true;
+            callDealerVerdictDisplay(playerInProcess, "SURRENDED");
         } else {
             playerScore = checkCount(players[playerInProcess].hand);
             if (playerScore > 21) {
-                if (isThisABlackJack(hand) &&  players[playerInProcess].insurance) {
-                    //paid insurance garantie 2 time the bet
-                    persons[players[playerInProcess].person].cash = persons[players[playerInProcess].person].cash + (players[playerInProcess].bet * 2);
-                    players[playerInProcess].bet = 0;
-                    hasPaid = true;
-                } else {
                     //loose full bet
                     players[playerInProcess].bet = 0;
-                }
+                    callDealerVerdictDisplay(playerInProcess, "PLAYER_BUSTED");
             } else {
-                if (playerScore > dealerScore) {
-                    if (isThisABlackJack(players[playerInProcess].hand)) {
-                        //win 1.5 X bet + keep the bet
-                        persons[players[playerInProcess].person].cash = persons[players[playerInProcess].person].cash + players[playerInProcess].bet + (players[playerInProcess].bet * 1.5);
-                        players[playerInProcess].bet = 0;
-                        hasPaid = true;
-                    } else {
-                        //win 1 X bet + keep the bet
-                        persons[players[playerInProcess].person].cash = persons[players[playerInProcess].person].cash + (players[playerInProcess].bet * 2);
-                        players[playerInProcess].bet = 0;
-                        hasPaid = true;                            
-                    }
-                } else if (playerScore === dealerScore) {
+                if ((isThisABlackJack(players[playerInProcess].hand) && isThisABlackJack(hand)) || (playerScore === dealerScore && !isThisABlackJack(hand) && !isThisABlackJack(players[playerInProcess].hand)) {
                     //safe: keep your bet
                     persons[players[playerInProcess].person].cash = persons[players[playerInProcess].person].cash + players[playerInProcess].bet;
                     players[playerInProcess].bet = 0;
-                    hasPaid = true;                        
+                    hasPaid = true;
+                    callDealerVerdictDisplay(playerInProcess, "EQUALITY");
                 } else {
-                    //loose
-                    players[playerInProcess].bet = 0;
+                    if (isThisABlackJack(hand)) {
+                        if (players[playerInProcess].insurance) {
+                            //paid insurance garantie 2 time the bet
+                            persons[players[playerInProcess].person].cash = persons[players[playerInProcess].person].cash + (players[playerInProcess].bet * 2);
+                            players[playerInProcess].bet = 0;
+                            hasPaid = true;
+                            callDealerVerdictDisplay(playerInProcess, "CLAIM_INSURANCE");
+                        } else {
+                            //loose full bet
+                            players[playerInProcess].bet = 0;
+                            callDealerVerdictDisplay(playerInProcess, "BLACKJACK_FROM_DEALER");                            
+                        }
+                    } else {
+                        if (isThisABlackJack(players[playerInProcess].hand)) {
+                            //win 1.5 X bet + keep the bet
+                            persons[players[playerInProcess].person].cash = persons[players[playerInProcess].person].cash + players[playerInProcess].bet + (players[playerInProcess].bet * 1.5);
+                            players[playerInProcess].bet = 0;
+                            hasPaid = true;
+                            callDealerVerdictDisplay(playerInProcess, "BLACKJACK_FROM_PLAYER"); 
+                        } else {
+                            if ((playerScore > dealerScore && dealerScore < 22) || (dealerScore > 21) ) {
+                                //win 1 X bet + keep the bet
+                                persons[players[playerInProcess].person].cash = persons[players[playerInProcess].person].cash + (players[playerInProcess].bet * 2);
+                                players[playerInProcess].bet = 0;
+                                hasPaid = true;                                  
+                                if (dealerScore > 21) {
+                                    callDealerVerdictDisplay(playerInProcess, "DEALER_BUSTED");
+                                } else {
+                                    callDealerVerdictDisplay(playerInProcess, "PLAYER_WINS");
+                                }
+                            } else {
+                                //loose
+                                players[playerInProcess].bet = 0;
+                                callDealerVerdictDisplay(playerInProcess, "PLAYER_LOSES");
+                            }
+                        }
+                    }
+                    
                 }
+
             }
         }
         if (hasPaid) {
@@ -449,6 +470,15 @@ function payingOnePlayer() {
         updateCash(playerInProcess, false); 
         players[playerInProcess].state = "JOINED";
     }
+}
+
+function callDealerVerdictDisplay(playerNo, conclusion) {
+    var message = {
+        "action": "DEALER_VERDICT",
+        "playerNo": playerNo,
+        "conclusion": conclusion
+    };
+    Messages.sendMessage(channelComm, JSON.stringify(message));    
 }
 
 function drawAcard() {
