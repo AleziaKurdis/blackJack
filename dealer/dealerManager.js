@@ -36,11 +36,11 @@
             if (data.action === "DEALER_VERDICT") {
                 playerNo = parseInt(data.playerNo, 10);
                 expressVerdict(data.playerNo, data.conclusion);
-            } else if (data.action === "DISTRIBUTION") {
+            } else if (data.action === "DEALER_DISTRIBUTION") {
                 //When cards are going to be drawn
-            } else if (data.action === "BETTING") {
+            } else if (data.action === "DEALER_BETTING") {
                 //Betting time announce
-            } else if (data.action === "BETTING_NEWBE") {
+            } else if (data.action === "DEALER_BETTING_NEWBE") {
                 //Betting time welcome & Announce
             }
         }
@@ -48,7 +48,7 @@
 
     function expressVerdict(playerNo, conclusion) {
         switch(strValue) {
-            case "SURRENDED":
+            case "SURRENDERED":
                 break;
             case "PLAYER_BUSTED":
                 break;            
