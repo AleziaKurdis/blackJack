@@ -443,20 +443,24 @@ function payingOnePlayer() {
                             hasPaid = true;
                             callDealerVerdictDisplay(playerInProcess, "BLACKJACK_FROM_PLAYER"); 
                         } else {
-                            if ((playerScore > dealerScore && dealerScore < 22) || (dealerScore > 21) ) {
+                            if (dealerScore > 21) {
                                 //win 1 X bet + keep the bet
                                 persons[players[playerInProcess].person].cash = persons[players[playerInProcess].person].cash + (players[playerInProcess].bet * 2);
                                 players[playerInProcess].bet = 0;
-                                hasPaid = true;                                  
-                                if (dealerScore > 21) {
-                                    callDealerVerdictDisplay(playerInProcess, "DEALER_BUSTED");
-                                } else {
-                                    callDealerVerdictDisplay(playerInProcess, "PLAYER_WINS");
-                                }
+                                hasPaid = true; 
+                                callDealerVerdictDisplay(playerInProcess, "DEALER_BUSTED");
                             } else {
-                                //loose
-                                players[playerInProcess].bet = 0;
-                                callDealerVerdictDisplay(playerInProcess, "PLAYER_LOSES");
+                                if ( playerScore > dealerScore ) {
+                                    //win 1 X bet + keep the bet
+                                    persons[players[playerInProcess].person].cash = persons[players[playerInProcess].person].cash + (players[playerInProcess].bet * 2);
+                                    players[playerInProcess].bet = 0;
+                                    hasPaid = true;
+                                    callDealerVerdictDisplay(playerInProcess, "PLAYER_WINS");
+                                } else {
+                                    //loose
+                                    players[playerInProcess].bet = 0;
+                                    callDealerVerdictDisplay(playerInProcess, "PLAYER_LOSES");                                    
+                                }
                             }
                         }
                     }
