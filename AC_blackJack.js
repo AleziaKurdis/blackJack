@@ -91,6 +91,7 @@ var players = [
 var gameLoopOn = false;
 var gameflowState = "OFF"; //OFF - BETTING - ACTIONS
 var playerInProcess = 0;
+var isThereNewPlayers = false;
 
 function playerSit(playerNo, avatarID){
     personNo = -1;
@@ -115,6 +116,7 @@ function playerSit(playerNo, avatarID){
         players[playerNo].person = length - 1;
         players[playerNo].state = "JOINED";
         players[playerNo].bet = 0;
+        isThereNewPlayers = true;
     }
     if (gameflowState === "OFF") {
         countDown = -1;
@@ -334,7 +336,10 @@ function updateCash(playerNo, isInteractive) {
 
 var hand = [];
 function cardsDistribution() {
-    var message;
+    var message = {
+        "action": "DEALER_DISTRIBUTION"
+    };
+    Messages.sendMessage(channelComm, JSON.stringify(message));     
     for (var i = 1; i < players.length; i++) {
         if (players[i].state === "PLAYING") {
             players[i].insurance = false;
@@ -403,7 +408,7 @@ function payingOnePlayer() {
             persons[players[playerInProcess].person].cash = persons[players[playerInProcess].person].cash + Math.floor(players[playerInProcess].bet/2);
             players[playerInProcess].bet = 0;
             hasPaid = true;
-            callDealerVerdictDisplay(playerInProcess, "SURRENDED");
+            callDealerVerdictDisplay(playerInProcess, "SURRENDERED");
         } else {
             playerScore = checkCount(players[playerInProcess].hand);
             if (playerScore > 21) {
@@ -605,6 +610,18 @@ function myTimer(deltaTime) {
         switch(gameflowState) {
             case "BETTING":
                 if (countDown === -1) {
+                    if (isThereNewPlayers) {
+                        message = {
+                            "action": "DEALER_BETTING_NEWBE"
+                        };
+                        Messages.sendMessage(channelComm, JSON.stringify(message));                           
+                        isThereNewPlayers = false;
+                    } else {
+                        message = {
+                            "action": "DEALER_BETTING"
+                        };
+                        Messages.sendMessage(channelComm, JSON.stringify(message));
+                    }
                     for (i = 1; i < players.length; i++) {
                         if (players[i].state === "JOINED") {
                             message = {
