@@ -19,29 +19,68 @@
 
     var thisEntityID = Uuid.NULL;
     var thisRenderWithZones;
-
+    var SURRENDERED;
+    var PLAYER_BUSTED;
+    var EQUALITY;
+    var CLAIM_INSURANCE;
+    var BLACKJACK_FROM_DEALER;
+    var BLACKJACK_FROM_PLAYER;
+    var DEALER_BUSTED;
+    var PLAYER_WINS;
+    var PLAYER_LOSES;
+    var DEALER_DISTRIBUTION;
+    var DEALER_BETTING;
+    var DEALER_BETTING_NEWBE;
     
     this.preload = function(entityID) {
         thisEntityID = entityID;
         var properties = Entities.getEntityProperties(entityID,["renderWithZones"]);
         thisRenderWithZones = properties.renderWithZones;
 
+        SURRENDERED = SoundCache.getSound(ROOT + "voice/SURRENDERED.mp3");
+        PLAYER_BUSTED = SoundCache.getSound(ROOT + "voice/PLAYER_BUSTED.mp3");
+        EQUALITY = SoundCache.getSound(ROOT + "voice/EQUALITY.mp3");
+        CLAIM_INSURANCE = SoundCache.getSound(ROOT + "voice/CLAIM_INSURANCE.mp3");
+        BLACKJACK_FROM_DEALER = SoundCache.getSound(ROOT + "voice/BLACKJACK_FROM_DEALER.mp3");
+        BLACKJACK_FROM_PLAYER = SoundCache.getSound(ROOT + "voice/BLACKJACK_FROM_PLAYER.mp3");
+        DEALER_BUSTED = SoundCache.getSound(ROOT + "voice/DEALER_BUSTED.mp3");
+        PLAYER_WINS = SoundCache.getSound(ROOT + "voice/DEALER_BUSTED.mp3");
+        PLAYER_LOSES = SoundCache.getSound(ROOT + "voice/PLAYER_LOSES.mp3");
+        DEALER_DISTRIBUTION = SoundCache.getSound(ROOT + "voice/DEALER_DISTRIBUTION.mp3");
+        DEALER_BETTING = SoundCache.getSound(ROOT + "voice/DEALER_BETTING.mp3");
+        DEALER_BETTING_NEWBE = SoundCache.getSound(ROOT + "voice/DEALER_BETTING_NEWBE.mp3");
+
         Messages.subscribe(channelComm);
         Messages.messageReceived.connect(onMessageReceived);
+    }
+
+    function talk(audioSentence) {
+        var position = Entities.getEntityProperties(thisEntityID,["position"]).position;
+        var injectorOptions = {
+            "position": Vec3.sum(position, {"x": 0, "y": 1.65, "z": 0}),
+            "volume": 0.8,
+            "loop": false,
+            "localOnly": true
+        };
+        var injector = Audio.playSound(audioSentence, injectorOptions);
     }
 
     function onMessageReceived(channel, message, sender, localOnly) {
         if (channel === channelComm) {
             var data = JSON.parse(message);
             if (data.action === "DEALER_VERDICT") {
+                //player specific verdict
                 playerNo = parseInt(data.playerNo, 10);
                 expressVerdict(data.playerNo, data.conclusion);
             } else if (data.action === "DEALER_DISTRIBUTION") {
                 //When cards are going to be drawn
+                talk(DEALER_DISTRIBUTION);
             } else if (data.action === "DEALER_BETTING") {
                 //Betting time announce
+                talk(DEALER_BETTING);
             } else if (data.action === "DEALER_BETTING_NEWBE") {
                 //Betting time welcome & Announce
+                talk(DEALER_BETTING_NEWBE);
             }
         }
     }
@@ -49,31 +88,34 @@
     function expressVerdict(playerNo, conclusion) {
         switch(strValue) {
             case "SURRENDERED":
+                talk(SURRENDERED);
                 break;
             case "PLAYER_BUSTED":
+                talk(PLAYER_BUSTED);
                 break;            
             case "EQUALITY":
+                talk(EQUALITY);
                 break;
             case "CLAIM_INSURANCE":
+                talk(CLAIM_INSURANCE);
                 break;            
             case "BLACKJACK_FROM_DEALER":
+                talk(BLACKJACK_FROM_DEALER);
                 break;
             case "BLACKJACK_FROM_PLAYER":
+                talk(BLACKJACK_FROM_PLAYER);
                 break;
             case "DEALER_BUSTED":
+                talk(DEALER_BUSTED);
                 break;
             case "PLAYER_WINS":
+                talk(PLAYER_WINS);
                 break;
             case "PLAYER_LOSES":
+                talk(PLAYER_LOSES);
                 break;            
         }
-        //temporary output
-        var message = {
-            "message": "Player " + playerNo + ": " + conclusion
-        };
-        Messages.sendMessage("Hifi-Notifications", JSON.stringify(message));
-        //end temporary Output
-        
+ 
     }
 
     this.unload = function(entityID) {
