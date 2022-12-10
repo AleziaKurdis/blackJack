@@ -86,7 +86,7 @@
     }
 
     function expressVerdict(playerNo, conclusion) {
-        switch(strValue) {
+        switch(conclusion) {
             case "SURRENDERED":
                 talk(SURRENDERED);
                 break;
