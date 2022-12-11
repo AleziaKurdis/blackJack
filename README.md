@@ -19,7 +19,10 @@ Select this URL: **https://aleziakurdis.github.io/blackJack/INSTALL_BlackJackTab
   
 **Note:** Select the black Jack table to position table and seats.  
   
-  
+### Emissive verus Non-emissive cards 
+By default the cards ar non-emissive. But if you need them emissive for any reasons, you can by simple enter "**EMISSIVE_CARDS**" in the "**description**" property of the blackjack table entity.  
+   
+     
 ### Multiple tables in a same domain...  
 This will work with only one table per domain.  
 if for any reason you would like to run many Black Jack Tables, you will need to have a separated set of script and modify the communication channel in most of the scripts (Find & Replace):  
