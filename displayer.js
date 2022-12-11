@@ -272,7 +272,7 @@
                         "grabbable": false
                     },
                     "imageURL": ROOT +  "cards/back.svg",
-                    "emissive": false,
+                    "emissive": cardsUnLit,
                     "type": "Image"
                 },"local");
             }
