@@ -22,12 +22,15 @@
     var SOUND_FLIP, SOUND_COINS;
     
     var dealerID = Uuid.NULL;
+    var cardsUnLit = false;
     
     this.preload = function(entityID) {
         thisEntityID = entityID;
-        var properties = Entities.getEntityProperties(entityID,["renderWithZones", "position"]);
+        var properties = Entities.getEntityProperties(entityID,["renderWithZones", "position", "description"]);
         thisRenderWithZones = properties.renderWithZones;
-
+        if (properties.description === "EMISSIVE_CARDS") {
+            cardsUnLit = true;
+        }
         SOUND_FLIP = SoundCache.getSound(ROOT + "sounds/flip.wav");
         SOUND_COINS = SoundCache.getSound(ROOT + "sounds/coins.wav");
 
@@ -251,7 +254,7 @@
                             "grabbable": false
                         },
                         "imageURL": ROOT +  "cards/" + handArray[i].value + "_of_" + handArray[i].suit.toLowerCase() + ".svg",
-                        "emissive": false,
+                        "emissive": cardsUnLit,
                         "type": "Image"
                     },"local");
                 }
@@ -446,10 +449,10 @@
         },"local");
 
         var tokenDisplay = [
-            {"hue": 0, "faceUrl": ROOT + "tokens/token_1_normal.jpg"},
-            {"hue": 120, "faceUrl": ROOT + "tokens/token_10_normal.jpg"},
-            {"hue": 240, "faceUrl": ROOT + "tokens/token_100_normal.jpg"},
-            {"hue": 60, "faceUrl": ROOT + "tokens/token_1K_normal.jpg"},
+            {"hue": 60, "faceUrl": ROOT + "tokens/token_1_normal.jpg"},
+            {"hue": 110, "faceUrl": ROOT + "tokens/token_10_normal.jpg"},
+            {"hue": 250, "faceUrl": ROOT + "tokens/token_100_normal.jpg"},
+            {"hue": 10, "faceUrl": ROOT + "tokens/token_1K_normal.jpg"},
             {"hue": 180, "faceUrl": ROOT + "tokens/token_10K_normal.jpg"},
             {"hue": 300, "faceUrl": ROOT + "tokens/token_100K_normal.jpg"},
             {"hue": 30, "faceUrl": ROOT + "tokens/token_1M_normal.jpg"},
