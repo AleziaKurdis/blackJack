@@ -57,7 +57,7 @@
         dealerID = Entities.addEntity({
             "parentID": entityID,
             "renderWithZones": thisRenderWithZones,
-            "localPosition": {"x": 0, "y": 0, "z": 0};
+            "localPosition": {"x": 0, "y": 0, "z": 0},
             "type": "Model",
             "modelURL": ROOT + "dealer.fbx",
             "useOriginalPivot": true,
