@@ -461,7 +461,7 @@
             {"hue": 90, "faceUrl": ROOT + "tokens/token_1G_normal.jpg"}
         ];
         
-        var color = hslToRgb(tokenDisplay[exponent].hue/360, 1, 0.5);
+        var color = hslToRgb(tokenDisplay[exponent].hue/360, 1, 0.6);
         
         var materialData = {
             "materialVersion": 1,
