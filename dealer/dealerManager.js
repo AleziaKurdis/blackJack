@@ -58,6 +58,7 @@
             "parentID": entityID,
             "renderWithZones": thisRenderWithZones,
             "localPosition": {"x": 0, "y": 0, "z": 0},
+            "localRotation": Quat.fromVec3Degrees({"x": 0, "y": 180, "z": 0});
             "type": "Model",
             "modelURL": ROOT + "dealer.fbx",
             "useOriginalPivot": true,
@@ -66,6 +67,7 @@
             "animation": {
                 "url": ROOT + "dealer.fbx",
                 "firstFrame": 1,
+                "currentFrame": 1,
                 "lastFrame": 300,
                 "running": true,
                 "loop": true
