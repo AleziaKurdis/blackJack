@@ -117,7 +117,7 @@
                             "loop": true
                         }
                     });
-                }, 5000);
+                }, 4900);
             } else if (data.action === "DEALER_DISTRIBUTION") {
                 //When cards are going to be drawn
                 talk(DEALER_DISTRIBUTION);
@@ -142,7 +142,7 @@
                             "loop": true
                         }
                     });
-                }, 5000);
+                }, 4900);
             } else if (data.action === "DEALER_BETTING") {
                 //Betting time announce
                 talk(DEALER_BETTING);
@@ -167,7 +167,7 @@
                             "loop": true
                         }
                     });
-                }, 5000);                
+                }, 4900);                
             } else if (data.action === "DEALER_BETTING_NEWBE") {
                 //Betting time welcome & Announce
                 talk(DEALER_BETTING_NEWBE);
@@ -192,7 +192,7 @@
                             "loop": true
                         }
                     });
-                }, 5000);                
+                }, 4900);                
             }
         }
     }
