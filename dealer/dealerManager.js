@@ -96,15 +96,103 @@
                 //player specific verdict
                 playerNo = parseInt(data.playerNo, 10);
                 expressVerdict(data.playerNo, data.conclusion);
+                Entities.editEntity(dealerID, {
+                    "animation": {
+                        "url": ROOT + "animations/animation_verdict.fbx",
+                        "firstFrame": 1,
+                        "currentFrame": 1,
+                        "lastFrame": 150,
+                        "running": true,
+                        "loop": true
+                    }
+                });
+                Script.setTimeout(function () {
+                    Entities.editEntity(dealerID, {
+                        "animation": {
+                            "url": ROOT + "animations/animation_idle.fbx",
+                            "firstFrame": 1,
+                            "currentFrame": 1,
+                            "lastFrame": 300,
+                            "running": true,
+                            "loop": true
+                        }
+                    });
+                }, 5000);
             } else if (data.action === "DEALER_DISTRIBUTION") {
                 //When cards are going to be drawn
                 talk(DEALER_DISTRIBUTION);
+                Entities.editEntity(dealerID, {
+                    "animation": {
+                        "url": ROOT + "animations/animation_distribute.fbx",
+                        "firstFrame": 1,
+                        "currentFrame": 1,
+                        "lastFrame": 150,
+                        "running": true,
+                        "loop": true
+                    }
+                });
+                Script.setTimeout(function () {
+                    Entities.editEntity(dealerID, {
+                        "animation": {
+                            "url": ROOT + "animations/animation_idle.fbx",
+                            "firstFrame": 1,
+                            "currentFrame": 1,
+                            "lastFrame": 300,
+                            "running": true,
+                            "loop": true
+                        }
+                    });
+                }, 5000);
             } else if (data.action === "DEALER_BETTING") {
                 //Betting time announce
                 talk(DEALER_BETTING);
+                Entities.editEntity(dealerID, {
+                    "animation": {
+                        "url": ROOT + "animations/animation_bet.fbx",
+                        "firstFrame": 1,
+                        "currentFrame": 1,
+                        "lastFrame": 150,
+                        "running": true,
+                        "loop": true
+                    }
+                });
+                Script.setTimeout(function () {
+                    Entities.editEntity(dealerID, {
+                        "animation": {
+                            "url": ROOT + "animations/animation_idle.fbx",
+                            "firstFrame": 1,
+                            "currentFrame": 1,
+                            "lastFrame": 300,
+                            "running": true,
+                            "loop": true
+                        }
+                    });
+                }, 5000);                
             } else if (data.action === "DEALER_BETTING_NEWBE") {
                 //Betting time welcome & Announce
                 talk(DEALER_BETTING_NEWBE);
+                Entities.editEntity(dealerID, {
+                    "animation": {
+                        "url": ROOT + "animations/animation_distribute.fbx",
+                        "firstFrame": 1,
+                        "currentFrame": 1,
+                        "lastFrame": 150,
+                        "running": true,
+                        "loop": true
+                    }
+                });
+                Script.setTimeout(function () {
+                    Entities.editEntity(dealerID, {
+                        "animation": {
+                            "url": ROOT + "animations/animation_idle.fbx",
+                            "firstFrame": 1,
+                            "currentFrame": 1,
+                            "lastFrame": 300,
+                            "running": true,
+                            "loop": true
+                        }
+                    });
+                }, 5000);                
             }
         }
     }
