@@ -65,7 +65,7 @@
             "shapeType": "none",
             "name": "Dealer",
             "animation": {
-                "url": ROOT + "dealer.fbx",
+                "url": ROOT + "animations/animation_idle.fbx",
                 "firstFrame": 1,
                 "currentFrame": 1,
                 "lastFrame": 300,
