@@ -702,7 +702,7 @@ function myTimer(deltaTime) {
                 if (countDown === -1) {
                     playerInProcess = 1;
                     if (players[playerInProcess].state === "PLAYING") {
-                        countDown = 10;
+                        countDown = 6;
                         payingOnePlayer();
                     } else {
                         countDown = 1;
@@ -722,7 +722,7 @@ function myTimer(deltaTime) {
                             playerInProcess = 1;
                         } else {
                             if (players[playerInProcess].state === "PLAYING") {
-                                countDown = 10;
+                                countDown = 6;
                                 payingOnePlayer();
                             } else {
                                 countDown = 1;
