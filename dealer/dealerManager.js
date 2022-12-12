@@ -19,6 +19,8 @@
 
     var thisEntityID = Uuid.NULL;
     var thisRenderWithZones;
+    var injector;
+    
     var SURRENDERED;
     var PLAYER_BUSTED;
     var EQUALITY;
@@ -31,6 +33,8 @@
     var DEALER_DISTRIBUTION;
     var DEALER_BETTING;
     var DEALER_BETTING_NEWBE;
+    
+    var dealerID = Uuid.NULL;
     
     this.preload = function(entityID) {
         thisEntityID = entityID;
@@ -49,7 +53,25 @@
         DEALER_DISTRIBUTION = SoundCache.getSound(ROOT + "voice/DEALER_DISTRIBUTION.mp3");
         DEALER_BETTING = SoundCache.getSound(ROOT + "voice/DEALER_BETTING.mp3");
         DEALER_BETTING_NEWBE = SoundCache.getSound(ROOT + "voice/DEALER_BETTING_NEWBE.mp3");
-
+        
+        dealerID = Entities.addEntity({
+            "parentID": entityID,
+            "renderWithZones": thisRenderWithZones,
+            "localPosition": {"x": 0, "y": 0, "z": 0};
+            "type": "Model",
+            "modelURL": ROOT + "dealer.fbx",
+            "useOriginalPivot": true,
+            "shapeType": "none",
+            "name": "Dealer",
+            "animation": {
+                "url": ROOT + "dealer.fbx",
+                "firstFrame": 1,
+                "lastFrame": 300,
+                "running": true,
+                "loop": true
+            }
+        }, "local");
+        
         Messages.subscribe(channelComm);
         Messages.messageReceived.connect(onMessageReceived);
     }
@@ -62,7 +84,7 @@
             "loop": false,
             "localOnly": true
         };
-        var injector = Audio.playSound(audioSentence, injectorOptions);
+        injector = Audio.playSound(audioSentence, injectorOptions);
     }
 
     function onMessageReceived(channel, message, sender, localOnly) {
@@ -119,7 +141,10 @@
     }
 
     this.unload = function(entityID) {
-
+        if(dealerID !== Uuid.NULL) {
+            Entities.deleteEntity(dealerID);
+            dealerID = Uuid.NULL;
+        }
         Messages.messageReceived.disconnect(onMessageReceived);
         Messages.unsubscribe(channelComm);
     };
