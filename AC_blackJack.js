@@ -678,7 +678,7 @@ function myTimer(deltaTime) {
                     if (countDown === 0) {
                         var atLeastOnePlayerPlaying = false;
                         for (i = 1; i < players.length; i++) {
-                            players[playerNo].betConfirmed = false;
+                            players[i].betConfirmed = false;
                             if (players[i].state === "PLAYING") {
                                 if (players[i].bet === 0) {
                                     players[i].state = "JOINED";
