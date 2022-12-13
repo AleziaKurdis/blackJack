@@ -198,7 +198,13 @@ function onMessageReceived(channel, message, sender, localOnly) {
                 "action": "CLEAR_PLAYER_INSURANCE",
                 "playerNo": playerNo
             };
-            Messages.sendMessage(channelComm, JSON.stringify(messageToSend));             
+            Messages.sendMessage(channelComm, JSON.stringify(messageToSend));
+            messageToSend = {
+                "action": "DISPLAY_CARDS",
+                "playerNo": playerNo,
+                "hand": []
+            };
+            Messages.sendMessage(channelComm, JSON.stringify(messageToSend));            
             players[playerNo] = {"person": -1, "state": "OUT", "bet": 0};            
             if (isAllPlayerOff()) {
                 Script.update.disconnect(myTimer);
