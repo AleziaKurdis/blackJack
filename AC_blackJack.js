@@ -106,6 +106,7 @@ function playerSit(playerNo, avatarID){
         players[playerNo].person = personNo;
         players[playerNo].state = "JOINED";
         players[playerNo].bet = 0;
+        players[playerNo].betConfirmed = false;
     } else {
         //New person
         var newPerson = {};
@@ -116,6 +117,7 @@ function playerSit(playerNo, avatarID){
         players[playerNo].person = length - 1;
         players[playerNo].state = "JOINED";
         players[playerNo].bet = 0;
+        players[playerNo].betConfirmed = false;
         isThereNewPlayers = true;
     }
     if (gameflowState === "OFF") {
@@ -155,6 +157,17 @@ function isAllPlayerOff() {
         }
     }
     return allOff;
+}
+
+function isAllPlayerConfirmedBet() {
+    var allConfirm = true;
+    for (var i = 1; i < players.length; i++) {
+        if (players[i].state === "PLAYING" && !players[i].betConfirmed) {
+            allConfirm = false;
+            break;
+        }
+    }
+    return allConfirm;
 }
 
 function onMessageReceived(channel, message, sender, localOnly) {
@@ -281,6 +294,18 @@ function onMessageReceived(channel, message, sender, localOnly) {
             updateCash(playerNo, true);            
             countDown = 30;
             sendActions();
+        } else if (data.action === "ACTION_CONFIRM") {
+            messageToSend = {
+                "action": "CLEAR_ACTIONS",
+                "avatarID": data.avatarID
+            };
+            Messages.sendMessage(channelComm, JSON.stringify(messageToSend));            
+            playerNo = getPlayerNoFromAvatarID(data.avatarID);
+            players[playerNo].betConfirmed = true;
+            updateCash(playerNo, false);
+            if (isAllPlayerConfirmedBet()) {
+                countDown = 1;
+            }
         }
     }
 }
@@ -653,6 +678,7 @@ function myTimer(deltaTime) {
                     if (countDown === 0) {
                         var atLeastOnePlayerPlaying = false;
                         for (i = 1; i < players.length; i++) {
+                            players[playerNo].betConfirmed = false;
                             if (players[i].state === "PLAYING") {
                                 if (players[i].bet === 0) {
                                     players[i].state = "JOINED";
