@@ -60,7 +60,7 @@
             "localPosition": {"x": 0, "y": 0, "z": 0},
             "localRotation": Quat.fromVec3Degrees({"x": 0, "y": 180, "z": 0}),
             "type": "Model",
-            "modelURL": ROOT + "dealer.fbx",
+            "modelURL": ROOT + "dealer.fst",
             "useOriginalPivot": true,
             "shapeType": "none",
             "name": "Dealer",
@@ -95,19 +95,36 @@
             if (data.action === "DEALER_VERDICT") {
                 //player specific verdict
                 playerNo = parseInt(data.playerNo, 10);
+                var angle = 0;
+                switch(playerNo) {
+                case 1:
+                    angle = -54;
+                    break;
+                case 2:
+                    angle = -18;
+                    break;
+                case 3:
+                    angle = 18;
+                    break;
+                case 4:
+                    angle = 54;
+                    break;                    
+                }
                 expressVerdict(data.playerNo, data.conclusion);
                 Entities.editEntity(dealerID, {
+                    "localRotation": Quat.fromVec3Degrees({"x": 0, "y": 180 + angle, "z": 0}),
                     "animation": {
                         "url": ROOT + "animations/animation_verdict.fbx",
                         "firstFrame": 1,
                         "currentFrame": 1,
                         "lastFrame": 150,
                         "running": true,
-                        "loop": true
+                        "loop": false
                     }
                 });
                 Script.setTimeout(function () {
                     Entities.editEntity(dealerID, {
+                        "localRotation": Quat.fromVec3Degrees({"x": 0, "y": 180, "z": 0}),
                         "animation": {
                             "url": ROOT + "animations/animation_idle.fbx",
                             "firstFrame": 1,
@@ -128,7 +145,7 @@
                         "currentFrame": 1,
                         "lastFrame": 150,
                         "running": true,
-                        "loop": true
+                        "loop": false
                     }
                 });
                 Script.setTimeout(function () {
@@ -153,7 +170,7 @@
                         "currentFrame": 1,
                         "lastFrame": 150,
                         "running": true,
-                        "loop": true
+                        "loop": false
                     }
                 });
                 Script.setTimeout(function () {
@@ -178,7 +195,7 @@
                         "currentFrame": 1,
                         "lastFrame": 150,
                         "running": true,
-                        "loop": true
+                        "loop": false
                     }
                 });
                 Script.setTimeout(function () {
