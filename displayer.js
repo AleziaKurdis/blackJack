@@ -135,7 +135,7 @@
         var position, id, actionScript;
         if (actionsList.length > 0) {
             for (var i = 0; i < actionsList.length; i++) {
-                position = {"x": (i * 0.07), "y": 0, "z": 0};
+                position = {"x": (i * 0.08), "y": 0, "z": 0};
                 actionScript = ROOT + "action_" + actionsList[i].toLowerCase() + ".js";
                 id = Entities.addEntity({
                     "parentID": playerActionsID,
@@ -152,18 +152,35 @@
                     "type": "Image"
                 },"local");
             }
+        } else {
+                id = Entities.addEntity({
+                    "parentID": playerActionsID,
+                    "renderWithZones": thisRenderWithZones,
+                    "name": "Action_CONFIRM",
+                    "localPosition": {"x": 0, "y": 0, "z": 0},
+                    "dimensions": {"x": 0.08, "y": 0.032, "z": 0.01},
+                    "grab": {
+                        "grabbable": false
+                    },
+                    "imageURL": ROOT +  "actions/confirm.jpg",
+                    "emissive": true,
+                    "script": ROOT + "action_confirm.js",
+                    "type": "Image"
+                },"local");            
         }
         //Countdown here!
+        var spacer = (actionsList.length * 0.08) + 0.08;
         countDownPrefix = "";
         if (actionsList.length === 0) {
             countDownPrefix = "TIME TO BET: ";
+            spacer = 0.18;
         }
         countDown = 30;
         countDownID = Entities.addEntity({
             "parentID": playerActionsID,
             "renderWithZones": thisRenderWithZones,
             "name": "Action_Timer",
-            "localPosition": {"x": (actionsList.length * 0.07) + 0.08, "y": 0, "z": -0.01},
+            "localPosition": {"x": spacer, "y": 0, "z": -0.01},
             "dimensions": {"x": 0.15, "y": 0.025, "z": 0.01},
             "grab": {
                 "grabbable": false
