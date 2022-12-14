@@ -124,6 +124,11 @@
                 });
                 Script.setTimeout(function () {
                     Entities.editEntity(dealerID, {
+                        "animation": {
+                            "running": false
+                        }
+                    });                    
+                    Entities.editEntity(dealerID, {
                         "localRotation": Quat.fromVec3Degrees({"x": 0, "y": 180, "z": 0}),
                         "animation": {
                             "url": ROOT + "animations/animation_idle.fbx",
@@ -151,6 +156,11 @@
                 Script.setTimeout(function () {
                     Entities.editEntity(dealerID, {
                         "animation": {
+                            "running": false
+                        }
+                    });
+                    Entities.editEntity(dealerID, {
+                        "animation": {
                             "url": ROOT + "animations/animation_idle.fbx",
                             "firstFrame": 1,
                             "currentFrame": 1,
@@ -176,6 +186,11 @@
                 Script.setTimeout(function () {
                     Entities.editEntity(dealerID, {
                         "animation": {
+                            "running": false
+                        }
+                    });
+                    Entities.editEntity(dealerID, {
+                        "animation": {
                             "url": ROOT + "animations/animation_idle.fbx",
                             "firstFrame": 1,
                             "currentFrame": 1,
@@ -199,6 +214,11 @@
                     }
                 });
                 Script.setTimeout(function () {
+                    Entities.editEntity(dealerID, {
+                        "animation": {
+                            "running": false
+                        }
+                    });                    
                     Entities.editEntity(dealerID, {
                         "animation": {
                             "url": ROOT + "animations/animation_idle.fbx",
