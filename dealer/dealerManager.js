@@ -72,7 +72,7 @@
                 "running": true,
                 "loop": true,
                 "hold": false,
-                "fps": 30
+                "fps": 24
             }
         }, "local");
         
@@ -123,7 +123,7 @@
                         "running": true,
                         "loop": false,
                         "hold": false,
-                        "fps": 30
+                        "fps": 24
                     }
                 });
                 Script.setTimeout(function () {
@@ -142,7 +142,7 @@
                             "running": true,
                             "loop": true,
                             "hold": false,
-                            "fps": 30
+                            "fps": 24
                         }
                     });
                 }, 4900);
@@ -158,7 +158,7 @@
                         "running": true,
                         "loop": false,
                         "hold": false,
-                        "fps": 30
+                        "fps": 24
                     }
                 });
                 Script.setTimeout(function () {
@@ -176,7 +176,7 @@
                             "running": true,
                             "loop": true,
                             "hold": false,
-                            "fps": 30
+                            "fps": 24
                         }
                     });
                 }, 4900);
@@ -210,7 +210,7 @@
                             "running": true,
                             "loop": true,
                             "hold": false,
-                            "fps": 30
+                            "fps": 24
                         }
                     });
                 }, 4900);                
@@ -226,7 +226,7 @@
                         "running": true,
                         "loop": false,
                         "hold": false,
-                        "fps": 30
+                        "fps": 24
                     }
                 });
                 Script.setTimeout(function () {
@@ -244,7 +244,7 @@
                             "running": true,
                             "loop": true,
                             "hold": false,
-                            "fps": 30
+                            "fps": 24
                         }
                     });
                 }, 4900);                
