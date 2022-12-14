@@ -270,7 +270,7 @@
                         "grab": {
                             "grabbable": false
                         },
-                        "imageURL": ROOT +  "cards/" + handArray[i].value + "_of_" + handArray[i].suit.toLowerCase() + ".svg",
+                        "imageURL": ROOT +  "cards/" + handArray[i].value + "_of_" + handArray[i].suit.toLowerCase() + ".png",
                         "emissive": cardsUnLit,
                         "type": "Image"
                     },"local");
@@ -288,7 +288,7 @@
                     "grab": {
                         "grabbable": false
                     },
-                    "imageURL": ROOT +  "cards/back.svg",
+                    "imageURL": ROOT +  "cards/back.png",
                     "emissive": cardsUnLit,
                     "type": "Image"
                 },"local");
