@@ -192,7 +192,7 @@
                         "running": true,
                         "loop": false,
                         "hold": false,
-                        "fps": 30
+                        "fps": 24
                     }
                 });
                 Script.setTimeout(function () {
