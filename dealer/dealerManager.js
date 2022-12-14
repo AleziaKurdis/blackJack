@@ -82,7 +82,7 @@
         var position = Entities.getEntityProperties(thisEntityID,["position"]).position;
         var injectorOptions = {
             "position": Vec3.sum(position, {"x": 0, "y": 1.65, "z": 0}),
-            "volume": 0.8,
+            "volume": 0.7,
             "loop": false,
             "localOnly": true
         };
