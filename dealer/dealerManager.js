@@ -70,7 +70,8 @@
                 "currentFrame": 1,
                 "lastFrame": 300,
                 "running": true,
-                "loop": true
+                "loop": true,
+                "fps": 30
             }
         }, "local");
         
@@ -119,7 +120,8 @@
                         "currentFrame": 1,
                         "lastFrame": 150,
                         "running": true,
-                        "loop": false
+                        "loop": false,
+                        "fps": 30
                     }
                 });
                 Script.setTimeout(function () {
@@ -136,7 +138,8 @@
                             "currentFrame": 1,
                             "lastFrame": 300,
                             "running": true,
-                            "loop": true
+                            "loop": true,
+                            "fps": 30
                         }
                     });
                 }, 4900);
@@ -150,7 +153,8 @@
                         "currentFrame": 1,
                         "lastFrame": 150,
                         "running": true,
-                        "loop": false
+                        "loop": false,
+                        "fps": 30
                     }
                 });
                 Script.setTimeout(function () {
@@ -166,7 +170,8 @@
                             "currentFrame": 1,
                             "lastFrame": 300,
                             "running": true,
-                            "loop": true
+                            "loop": true,
+                            "fps": 30
                         }
                     });
                 }, 4900);
@@ -180,7 +185,8 @@
                         "currentFrame": 1,
                         "lastFrame": 150,
                         "running": true,
-                        "loop": false
+                        "loop": false,
+                        "fps": 30
                     }
                 });
                 Script.setTimeout(function () {
@@ -196,7 +202,8 @@
                             "currentFrame": 1,
                             "lastFrame": 300,
                             "running": true,
-                            "loop": true
+                            "loop": true,
+                            "fps": 30
                         }
                     });
                 }, 4900);                
@@ -210,7 +217,8 @@
                         "currentFrame": 1,
                         "lastFrame": 150,
                         "running": true,
-                        "loop": false
+                        "loop": false,
+                        "fps": 30
                     }
                 });
                 Script.setTimeout(function () {
@@ -226,7 +234,8 @@
                             "currentFrame": 1,
                             "lastFrame": 300,
                             "running": true,
-                            "loop": true
+                            "loop": true,
+                            "fps": 30
                         }
                     });
                 }, 4900);                
