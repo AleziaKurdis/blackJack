@@ -122,7 +122,7 @@
                         "lastFrame": 150,
                         "running": true,
                         "loop": false,
-                        "hold": true,
+                        "hold": false,
                         "fps": 30
                     }
                 });
@@ -157,7 +157,7 @@
                         "lastFrame": 150,
                         "running": true,
                         "loop": false,
-                        "hold": true,
+                        "hold": false,
                         "fps": 30
                     }
                 });
@@ -191,7 +191,7 @@
                         "lastFrame": 150,
                         "running": true,
                         "loop": false,
-                        "hold": true,
+                        "hold": false,
                         "fps": 30
                     }
                 });
@@ -225,7 +225,7 @@
                         "lastFrame": 150,
                         "running": true,
                         "loop": false,
-                        "hold": true,
+                        "hold": false,
                         "fps": 30
                     }
                 });
