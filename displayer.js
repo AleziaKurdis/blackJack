@@ -262,7 +262,7 @@
                         "renderWithZones": thisRenderWithZones,
                         "name": "Player_" + playerNo + "_Card_" + (i+1),
                         "localPosition": position,
-                        "localRotation": Quat.fromVec3Degrees({"x": 90, "y": (Math.random() * 8) - 4}, "z": 0),
+                        "localRotation": Quat.fromVec3Degrees({"x": 90, "y": (Math.random() * 8) - 4, "z": 0}),
                         "dimensions": {"x": 0.06, "y": 0.01, "z": 0.10},
                         "grab": {
                             "grabbable": false
@@ -280,7 +280,7 @@
                     "renderWithZones": thisRenderWithZones,
                     "name": "Player_" + playerNo + "_Back",
                     "localPosition": position,
-                    "localRotation": Quat.fromVec3Degrees({"x": 90, "y": (Math.random() * 8) - 4}, "z": 0),
+                    "localRotation": Quat.fromVec3Degrees({"x": 90, "y": (Math.random() * 8) - 4, "z": 0}),
                     "dimensions": {"x": 0.06, "y": 0.01, "z": 0.10},
                     "grab": {
                         "grabbable": false
