@@ -22,15 +22,12 @@
     var SOUND_FLIP, SOUND_COINS;
     
     var dealerID = Uuid.NULL;
-    var cardsUnLit = false;
     
     this.preload = function(entityID) {
         thisEntityID = entityID;
-        var properties = Entities.getEntityProperties(entityID,["renderWithZones", "position", "description"]);
+        var properties = Entities.getEntityProperties(entityID,["renderWithZones", "position"]);
         thisRenderWithZones = properties.renderWithZones;
-        if (properties.description === "EMISSIVE_CARDS") {
-            cardsUnLit = true;
-        }
+
         SOUND_FLIP = SoundCache.getSound(ROOT + "sounds/flip.wav");
         SOUND_COINS = SoundCache.getSound(ROOT + "sounds/coins.wav");
 
@@ -270,9 +267,9 @@
                         "grab": {
                             "grabbable": false
                         },
-                        "imageURL": ROOT +  "cards/" + handArray[i].value + "_of_" + handArray[i].suit.toLowerCase() + ".png",
-                        "emissive": cardsUnLit,
-                        "type": "Image"
+                        "useOriginalPivot": true,
+                        "modelURL": ROOT +  "cards/" + handArray[i].value + "_of_" + handArray[i].suit.toLowerCase() + ".fst",
+                        "type": "Model"
                     },"local");
                 }
             }
@@ -288,9 +285,9 @@
                     "grab": {
                         "grabbable": false
                     },
-                    "imageURL": ROOT +  "cards/back.png",
-                    "emissive": cardsUnLit,
-                    "type": "Image"
+                    "useOriginalPivot": true,
+                    "modelURL": ROOT +  "cards/back.fst",
+                    "type": "Model"
                 },"local");
             }
         }
