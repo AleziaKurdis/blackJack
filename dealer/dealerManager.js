@@ -48,7 +48,7 @@
         BLACKJACK_FROM_DEALER = SoundCache.getSound(ROOT + "voice/BLACKJACK_FROM_DEALER.mp3");
         BLACKJACK_FROM_PLAYER = SoundCache.getSound(ROOT + "voice/BLACKJACK_FROM_PLAYER.mp3");
         DEALER_BUSTED = SoundCache.getSound(ROOT + "voice/DEALER_BUSTED.mp3");
-        PLAYER_WINS = SoundCache.getSound(ROOT + "voice/DEALER_BUSTED.mp3");
+        PLAYER_WINS = SoundCache.getSound(ROOT + "voice/PLAYER_WINS.mp3");
         PLAYER_LOSES = SoundCache.getSound(ROOT + "voice/PLAYER_LOSES.mp3");
         DEALER_DISTRIBUTION = SoundCache.getSound(ROOT + "voice/DEALER_DISTRIBUTION.mp3");
         DEALER_BETTING = SoundCache.getSound(ROOT + "voice/DEALER_BETTING.mp3");
