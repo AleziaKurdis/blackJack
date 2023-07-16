@@ -96,7 +96,7 @@
             var data = JSON.parse(message);
             if (data.action === "DEALER_VERDICT") {
                 //player specific verdict
-                playerNo = parseInt(data.playerNo, 10);
+                var playerNo = parseInt(data.playerNo, 10);
                 var angle = 0;
                 switch(playerNo) {
                 case 1:
