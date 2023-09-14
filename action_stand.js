@@ -1,4 +1,4 @@
-"use strict";
+//"use strict";
 //
 //  action_stand.js
 //
